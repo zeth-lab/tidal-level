@@ -12,12 +12,12 @@
 <style>
 /* 제도 시트 연장: 종이 바탕 위 흑연 선, 치수는 모노, 액센트는 청사진 남색 하나. 존 색만 채도 낮은 4단계 */
 :root{--bg:#f3f4f2;--sheet:#fbfbfa;--ink:#24272b;--mute:#6c7177;--grid:#e3e6e9;--kan:#b9c2ca;--ghost:#9aa4ae;--acc:#2f5fb8;--ok:#3f7a55;--mid:#9a6a14;--hi:#a8402f;
---z-sub:#9fabb5;--z-int:#d9cfb8;--z-sup:#c5cebc;--z-land:#8e9c89;--water:#56789a;--mass:#f1f0ec;--plinth:#cfd3d6;
+--z-sub:#e4d59c;--z-int:#d4e3a9;--z-sup:#93b77c;--z-land:#4e744b;--water:#56789a;--mass:#f1f0ec;--plinth:#cfd3d6;--b-ok:#b6b0dc;--b-mid:#e39a4b;--b-hi:#3f3b4d;
 --f-body:"IBM Plex Sans KR",system-ui,sans-serif;--f-mono:"IBM Plex Mono",ui-monospace,monospace}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16181b;--sheet:#1d2024;--ink:#e3e5e7;--mute:#959ba2;--grid:#262a2f;--kan:#3d444c;--ghost:#5b636c;--acc:#8fb0f0;--ok:#7fc39a;--mid:#e0b35c;--hi:#ec8a78;
---z-sub:#4d5862;--z-int:#7f7764;--z-sup:#68725f;--z-land:#55634f;--water:#8fb0cc;--mass:#2b2f34;--plinth:#3b4046;color-scheme:dark}}
+--z-sub:#706742;--z-int:#5d6c42;--z-sup:#456340;--z-land:#2d4a2e;--water:#8fb0cc;--mass:#2b2f34;--plinth:#3b4046;--b-ok:#9b94cc;--b-mid:#dc9548;--b-hi:#ece8f6;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#16181b;--sheet:#1d2024;--ink:#e3e5e7;--mute:#959ba2;--grid:#262a2f;--kan:#3d444c;--ghost:#5b636c;--acc:#8fb0f0;--ok:#7fc39a;--mid:#e0b35c;--hi:#ec8a78;
---z-sub:#4d5862;--z-int:#7f7764;--z-sup:#68725f;--z-land:#55634f;--water:#8fb0cc;--mass:#2b2f34;--plinth:#3b4046;color-scheme:dark}
+--z-sub:#706742;--z-int:#5d6c42;--z-sup:#456340;--z-land:#2d4a2e;--water:#8fb0cc;--mass:#2b2f34;--plinth:#3b4046;--b-ok:#9b94cc;--b-mid:#dc9548;--b-hi:#ece8f6;color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%}
@@ -35,7 +35,7 @@ input[type=text]{font-family:var(--f-body)}
 .muted{color:var(--mute)}
 .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 .chip{font:500 10.5px var(--f-body);padding:0 6px;border-radius:9px;border:1px solid currentColor;white-space:nowrap}
-.chip.ok{color:var(--ok)}.chip.mid{color:var(--mid)}.chip.hi{color:var(--hi)}.chip.acc{color:var(--acc)}
+.chip{color:var(--ink);border-color:var(--kan)}.chip i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
 .note{margin:0;font-size:12px;color:var(--mute);border-left:2px solid var(--acc);padding-left:10px;line-height:1.6}
 .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 
@@ -117,7 +117,7 @@ details.tc>summary:hover{background:color-mix(in srgb,var(--acc) 5%,transparent)
 .gsz button kbd{font:400 9px var(--f-mono);color:var(--mute);margin-left:3px}
 .ops{top:52px;left:10px;background:color-mix(in srgb,var(--sheet) 92%,transparent);border:1px solid var(--acc);padding:4px 6px;border-radius:4px}
 .ops .lbl{font:500 11.5px var(--f-mono);color:var(--acc);margin-right:4px}
-.help{position:absolute;left:10px;bottom:80px;font:400 11.5px var(--f-body);color:var(--mute);background:color-mix(in srgb,var(--sheet) 88%,transparent);padding:4px 8px;border:1px solid var(--grid);z-index:2;max-width:min(520px,calc(100% - 540px));line-height:1.6}
+.help{position:absolute;left:10px;bottom:118px;font:400 11.5px var(--f-body);color:var(--mute);background:color-mix(in srgb,var(--sheet) 88%,transparent);padding:4px 8px;border:1px solid var(--grid);z-index:2;max-width:min(560px,calc(100% - 20px));line-height:1.6}
 .compass{position:absolute;right:14px;top:52px;width:40px;height:40px;z-index:2;pointer-events:none}
 .badge{position:absolute;right:62px;top:54px;font:500 11px var(--f-mono);color:var(--mute);z-index:2;text-align:right;background:color-mix(in srgb,var(--sheet) 85%,transparent);padding:2px 6px;line-height:1.6}
 .syncbar{position:absolute;left:50%;transform:translateX(-50%);top:96px;z-index:4;font-size:12px;background:var(--sheet);border:1px solid var(--acc);color:var(--acc);padding:4px 10px;border-radius:4px;display:flex;gap:8px;align-items:center;white-space:nowrap}
@@ -151,6 +151,9 @@ th{color:var(--mute);font-size:11px;font-weight:500}
 .bi.sel{border-color:var(--acc)}.bi small{font:400 11px var(--f-mono);color:var(--mute)}
 #msg{font-size:12px;color:var(--mute);min-height:1.4em}#msg.bad{color:var(--hi)}
 .toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--sheet);font-size:12.5px;padding:6px 12px;border-radius:4px;z-index:20;max-width:calc(100% - 32px)}
+.pvbar{top:52px;left:10px;background:color-mix(in srgb,var(--sheet) 94%,transparent);border:1px solid var(--acc);padding:4px 8px;border-radius:4px;font-size:12px;gap:8px}.pvbar input[type=range]{width:120px;accent-color:var(--acc)}.pvbar input[type=number]{width:58px}
+.recbadge{position:absolute;top:52px;left:50%;transform:translateX(-50%);z-index:4;background:var(--sheet);border:1px solid var(--hi);color:var(--hi);font:500 12px var(--f-mono);padding:3px 10px;border-radius:4px}
+.swb{width:28px;height:22px;padding:0;border-radius:3px}.swb[aria-pressed="true"]{outline:2px solid var(--acc);outline-offset:1px}
 @media (max-width:1100px){
  body{overflow:auto;height:auto}html{height:auto}
  .home{grid-template-columns:1fr;height:auto}.toc{border-right:0;border-bottom:1px solid var(--kan);padding:0 0 12px}.homemain{overflow:visible}
@@ -211,7 +214,7 @@ th{color:var(--mute);font-size:11px;font-weight:500}
   </div>
   <div class="edmain">
     <aside class="side" id="lside" aria-label="조작 목차"><fieldset id="ctl"><div id="tocPanels"></div></fieldset>
-      <details class="tc" name="toc" id="tc-sync"><summary><span class="n">09</span>실시간 공유<span class="s" id="syncS">혼자</span></summary>
+      <details class="tc" name="toc" id="tc-sync"><summary><span class="n">10</span>실시간 공유<span class="s" id="syncS">혼자</span></summary>
         <div class="pn" id="syncPn"></div></details>
     </aside>
     <div class="stage" id="stage">
@@ -219,6 +222,7 @@ th{color:var(--mute);font-size:11px;font-weight:500}
         <button data-tool="area" title="12m 칸으로 섬 영역 고르기">영역</button>
         <button data-tool="edit" aria-pressed="true" title="칸을 골라 올리기·내리기">편집</button>
         <button data-tool="bld" title="건물 옮기기">건물</button>
+        <button data-tool="path" title="길·회랑·마당 면 그리기">길·면</button>
         <button data-tool="view" title="회전만">회전</button>
         <span class="sep"></span>
         <span class="gsz" id="gsz" aria-label="편집 칸 크기"></span>
@@ -230,8 +234,10 @@ th{color:var(--mute);font-size:11px;font-weight:500}
         <span class="lbl" id="opsLbl"></span>
         <button data-op="up" title="↑">▲ 올리기</button><button data-op="down" title="↓">▼ 내리기</button><button data-op="flat" title="F">평탄</button><button data-op="smooth" title="G">다듬기</button><button data-op="clear" title="Esc">선택 끝</button>
       </div>
+      <div class="ov pvbar" id="pvbar" hidden><b style="color:var(--acc)">사람 시점</b><label class="row" style="gap:6px">시야각 <input type="range" id="pvFov" min="15" max="120" step="1"> <span id="pvFovV" class="mono" style="min-width:34px"></span></label><label class="row" style="gap:4px">눈높이 <input type="number" id="pvEye" min="0.5" max="20" step="0.1"> m</label><label class="row" style="gap:4px">걷기 <input type="number" id="pvSpd" min="0.5" max="30" step="0.5"> m/s</label><button id="pvExit">아이소로 돌아가기</button></div>
+      <div class="recbadge" id="recbadge" hidden>● 녹화 중 <span id="recT">0:00</span> <button id="recStop2" style="margin-left:6px">■ 멈춤</button></div>
       <div class="ov views" role="toolbar" aria-label="시점">
-        <button id="centerBtn" title="섬을 화면 가운데에 맞춰요 (C)">⊙ 중앙 정렬</button><button data-view="se">아이소 SE</button><button data-view="sw">SW</button><button data-view="nw">NW</button><button data-view="ne">NE</button><button data-view="top">평면</button><button data-view="elev">입면</button><button id="secBtn">단면</button><button id="zin" aria-label="확대">＋</button><button id="zout" aria-label="축소">－</button>
+        <button id="pvBtn" title="사람 눈높이에서 보기 (땅을 더블클릭해도 돼요)">사람 시점</button><button id="centerBtn" title="섬을 화면 가운데에 맞춰요 (C)">⊙ 중앙 정렬</button><button data-view="se">아이소 SE</button><button data-view="sw">SW</button><button data-view="nw">NW</button><button data-view="ne">NE</button><button data-view="top">평면</button><button data-view="elev">입면</button><button id="secBtn">단면</button><button id="zin" aria-label="확대">＋</button><button id="zout" aria-label="축소">－</button>
       </div>
       <div class="syncbar" id="syncbar" hidden></div>
       <svg class="compass" id="compass" viewBox="-20 -20 40 40" aria-hidden="true"><circle r="17" fill="none" stroke="var(--kan)"/><g id="cmpG"><path d="M0 -14 L4 2 L0 -1 L-4 2Z" fill="var(--ink)"/><text x="0" y="-19.5" text-anchor="middle" font-size="7.5" font-family="IBM Plex Mono,monospace" fill="var(--mute)">N</text></g></svg>
@@ -258,6 +264,7 @@ th{color:var(--mute);font-size:11px;font-weight:500}
       </div>
       <div class="sec"><h2>지금 수위에서 <span id="sW">EL</span></h2><dl class="kv" id="kv2"></dl></div>
       <div class="sec"><h2>건물 <span id="sB"></span></h2><dl class="kv" id="kv3"></dl><div class="blist" id="blist"></div></div>
+      <div class="sec"><h2>길·면 <span id="sP"></span></h2><dl class="kv" id="kv4"></dl></div>
     </aside>
   </div>
 </div>
@@ -290,11 +297,14 @@ const newId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const DEF={G:12,M:20,B:3,theta:0,skew:0,aspect:1,shape:'rsq',target:40000,base:2,edgeN:0,seabed:-2,
  R:4,neap:.5,storm:2,walk:1,float:3,floorH:3,div:3,maxFloors:4,
  g:12,autoSlope:true,slopeN:6,mode:'step',exag:2,colorMode:'zone',showRef:true,showGrid:true,showFoot:true,
- kan:2,nkFloors:3,snapKan:true,statusTint:true};
+ kan:2,nkFloors:3,snapKan:true,statusTint:true,pKind:'path',pW:3,pMode:'ground',pEl:6,pSnap:1,pCol:0};
 let S={...DEF};
 const U=()=>S.floorH/S.div;
 const q=h=>Math.floor(h/U()+1e-6)*U();
 const ceilEL=()=>S.maxFloors*S.floorH;
+const PV={on:false,x:0,z:0,h:0,p:0,fov:60,eye:1.6,speed:3,lt:0};const keys=new Set();
+const EX=()=>PV.on?1:S.exag;
+const PCOL=[['돌','#cfc9bc'],['목재','#b58b5c'],['흰 판','#f3f1ea'],['먹','#4b4b52'],['물빛','#86aecf'],['황토','#c9a762']];
 const TYPES0=[{k:'u1',name:'유닛 1 · 1–3인',W:10,D:6,F:1,n:12},{k:'u2',name:'유닛 2 · 4–6인',W:14,D:10,F:1,n:4},{k:'hub',name:'허브',W:60,D:15,F:2,n:1},{k:'nk',name:'누각',W:44,D:12,F:1,n:1,raised:true},{k:'jj',name:'정자',W:6,D:6,F:1,n:1}];
 let TYPES=TYPES0.map(t=>({...t})),TK={};const reTK=()=>{TK=Object.fromEntries(TYPES.map(t=>[t.k,t]))};reTK();
 const GS=[12,6,4,3,2,1];
@@ -346,22 +356,22 @@ function slopeFrom(idx,dir){if(!idx.length)return;const s=1/S.slopeN,s2=s*Math.S
 
 /* 되돌리기 */
 const undoStack=[],redoStack=[];
-function snap(){return{N,H:H.slice(0),foot:[...foot],blocks:JSON.stringify(blocks),edited};}
+function snap(){return{N,H:H.slice(0),foot:[...foot],blocks:JSON.stringify(blocks),paths:JSON.stringify(paths),edited};}
 function updUR(){const u=$('undoBtn'),r=$('redoBtn');if(!u||!r)return;const v=Sync.role==='view';u.disabled=v||!undoStack.length;r.disabled=v||!redoStack.length;}
 function pushUndo(){undoStack.push(snap());if(undoStack.length>30)undoStack.shift();redoStack.length=0;updUR();}
 function clearHistory(){undoStack.length=0;redoStack.length=0;updUR();}
-function restoreSnap(u){H=u.H;foot=new Set(u.foot);blocks=JSON.parse(u.blocks);edited=u.edited;bsel=-1;refreshD();touch();updateTerrain();changed(true);markDirty();renderPalette();renderFootNote();updUR();}
+function restoreSnap(u){H=u.H;foot=new Set(u.foot);blocks=JSON.parse(u.blocks);paths=JSON.parse(u.paths||'[]');psel=-1;edited=u.edited;bsel=-1;refreshD();touch();updateTerrain();changed(true);markDirty();renderPalette();renderFootNote();updUR();}
 function undo(){if(!canEdit())return;const u=undoStack.pop();if(!u){toast('되돌릴 작업이 없어요');return}if(u.N!==N){clearHistory();return}redoStack.push(snap());if(redoStack.length>30)redoStack.shift();restoreSnap(u);}
 function redo(){if(!canEdit())return;const r=redoStack.pop();if(!r){toast('다시 할 작업이 없어요');return}if(r.N!==N){clearHistory();return}undoStack.push(snap());restoreSnap(r);}
 
 /* ───────── 3D ───────── */
 let C={};
-function readTokens(){const cs=getComputedStyle(document.documentElement);for(const n of['bg','sheet','ink','mute','grid','kan','ghost','acc','ok','mid','hi','z-sub','z-int','z-sup','z-land','water','mass','plinth'])C[n]=new THREE.Color(cs.getPropertyValue('--'+n).trim()||'#888');}
+function readTokens(){const cs=getComputedStyle(document.documentElement);for(const n of['bg','sheet','ink','mute','grid','kan','ghost','acc','ok','mid','hi','z-sub','z-int','z-sup','z-land','water','mass','plinth','b-ok','b-mid','b-hi'])C[n]=new THREE.Color(cs.getPropertyValue('--'+n).trim()||'#888');}
 const cv=$('cv'),stage=$('stage');
 const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true,alpha:true});
 renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
 const scene=new THREE.Scene();
-const cam=new THREE.OrthographicCamera(-1,1,1,-1,-3000,5000);
+const cam=new THREE.OrthographicCamera(-1,1,1,-1,-3000,5000);const pcam=new THREE.PerspectiveCamera(60,1,0.1,4000);const AC=()=>PV.on?pcam:cam;
 scene.add(new THREE.HemisphereLight(0xffffff,0x8a8f94,0.78));const sun=new THREE.DirectionalLight(0xffffff,0.5);sun.position.set(-0.55,1,-0.35);scene.add(sun);
 const V={yaw:PI/4,pitch:Math.atan(1/Math.SQRT2),zoom:1,tx:0,ty:2,tz:0};
 let animV=null,curView='se';
@@ -405,7 +415,7 @@ function rebuildTerrain(){if(terrain){scene.remove(terrain);if(terrain.geometry!
  if(base){scene.remove(base);base.geometry.dispose();base=null}
  if(S.mode!=='step'){base=new THREE.Mesh(new THREE.BoxGeometry(N,1,N),terrMat);scene.add(base);}
  updateTerrain();buildSiteLine();}
-function updateTerrain(){const e=S.exag,bot=S.seabed-1.5;
+function updateTerrain(){const e=EX(),bot=S.seabed-1.5;
  if(terrainKind==='step'){const a=terrain.instanceMatrix.array;
   for(let i=0;i<N;i++)for(let j=0;j<N;j++){const k=i*N+j,o=k*16,h=D[k],sy=Math.max(0.001,(h-bot)*e);
    a[o]=1;a[o+1]=0;a[o+2]=0;a[o+3]=0;a[o+4]=0;a[o+5]=sy;a[o+6]=0;a[o+7]=0;a[o+8]=0;a[o+9]=0;a[o+10]=1;a[o+11]=0;a[o+12]=cx(j);a[o+13]=(h+bot)/2*e;a[o+14]=cz(i);a[o+15]=1;}
@@ -414,7 +424,7 @@ function updateTerrain(){const e=S.exag,bot=S.seabed-1.5;
   if(base){base.scale.y=1.5*e;base.position.y=(S.seabed-0.75)*e-0.02;}}
  need=true;}
 const siteLine=new THREE.LineLoop(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({}));scene.add(siteLine);
-function buildSiteLine(){const h=S.M*S.G/2,y=S.seabed*S.exag+0.06;siteLine.geometry.dispose();siteLine.geometry=new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array([-h,y,-h,h,y,-h,h,y,h,-h,y,h]),3));}
+function buildSiteLine(){const h=S.M*S.G/2,y=S.seabed*EX()+0.06;siteLine.geometry.dispose();siteLine.geometry=new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array([-h,y,-h,h,y,-h,h,y,h,-h,y,h]),3));}
 
 /* 물·기준선 */
 const waterMat=new THREE.MeshBasicMaterial({transparent:true,opacity:0.36,depthWrite:false,side:THREE.DoubleSide});
@@ -424,7 +434,7 @@ const refMat=new THREE.LineDashedMaterial({dashSize:1.6,gapSize:1.2,transparent:
 const refLo=new THREE.LineSegments(new THREE.BufferGeometry(),refMat),refHi=new THREE.LineSegments(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({transparent:true,opacity:0.6}));scene.add(refLo,refHi);
 const secLine=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({}));secLine.renderOrder=7;secLine.visible=false;scene.add(secLine);
 let W=2,spring=true;
-function contour(L,yOff){const out=[];const y=L*S.exag+yOff;
+function contour(L,yOff){const out=[];const y=L*EX()+yOff;
  if(S.mode==='step'){for(let i=0;i<N;i++)for(let j=0;j<N;j++){const k=i*N+j,a=D[k]>=L-1e-6;
    if(j<N-1&&a!==(D[k+1]>=L-1e-6)){const x=cx(j)+0.5,z=cz(i);out.push(x,y,z-0.5,x,y,z+0.5);}
    if(i<N-1&&a!==(D[k+N]>=L-1e-6)){const z=cz(i)+0.5,x=cx(j);out.push(x-0.5,y,z,x+0.5,y,z);}}}
@@ -436,7 +446,7 @@ function contour(L,yOff){const out=[];const y=L*S.exag+yOff;
    const T=TB[code];for(let s=0;s<T.length;s+=2){const p1=E[T[s]](),p2=E[T[s+1]]();out.push(p1[0],y,p1[1],p2[0],y,p2[1]);}}}
  return new Float32Array(out);}
 function setLines(obj,arr,dashed){obj.geometry.dispose();const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(arr,3));obj.geometry=g;if(dashed)obj.computeLineDistances();}
-function updateWater(){water.scale.set(N,N,1);water.position.set(0,W*S.exag+0.01,0);setLines(shore,contour(W,0.03));need=true;}
+function updateWater(){water.scale.set(N,N,1);water.position.set(0,W*EX()+0.01,0);setLines(shore,contour(W,0.03));need=true;}
 function updateRefs(){refLo.visible=refHi.visible=S.showRef;if(!S.showRef)return;setLines(refLo,contour(0,0.04),true);setLines(refHi,contour(S.R,0.04));}
 
 /* ───────── 선택 표시 ───────── */
@@ -449,7 +459,7 @@ const footLine=new THREE.LineSegments(new THREE.BufferGeometry(),footLineMat);fo
 const hovMat=new THREE.LineBasicMaterial({depthTest:false,transparent:true,opacity:.7});
 const hovLine=new THREE.LineSegments(new THREE.BufferGeometry(),hovMat);hovLine.renderOrder=9;scene.add(hovLine);
 function cellMax(set,g){const mh=new Map();if(!set.size)return mh;for(let k=0;k<N*N;k++){if(!inSite[k])continue;const key=cellOf(k,g);if(set.has(key)){const h=D[k];const o=mh.get(key);if(o===undefined||h>o)mh.set(key,h);}}return mh;}
-function outlineGeo(set,g,withFill){const mh=cellMax(set,g),lines=[],tri=[],e=S.exag;
+function outlineGeo(set,g,withFill){const mh=cellMax(set,g),lines=[],tri=[],e=EX();
  for(const[key,h]of mh){const i=KI(key),j=KJ(key),y=h*e+0.08;
   const c=[[i*g,j*g],[(i+1)*g,j*g],[(i+1)*g,(j+1)*g],[i*g,(j+1)*g]].map(p=>g2w(p[0],p[1]));
   const nb=[K(i,j-1),K(i+1,j),K(i,j+1),K(i-1,j)];
@@ -458,7 +468,7 @@ function outlineGeo(set,g,withFill){const mh=cellMax(set,g),lines=[],tri=[],e=S.
  return{lines:new Float32Array(lines),tri:new Float32Array(tri)};}
 function updateSel(){const o=outlineGeo(sel,S.g,true);setLines(selLine,o.lines);selFill.geometry.dispose();selFill.geometry=new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(o.tri,3));
  const show=tool==='area'||(S.showFoot&&tool!=='bld');footLine.visible=show;if(show){const f=outlineGeo(foot,S.G,false);setLines(footLine,f.lines,true);}
- const ops=$('ops');ops.hidden=!(tool==='edit'&&sel.size&&canEdit());if(!ops.hidden)$('opsLbl').textContent=`${S.g}m 칸 ${sel.size}개`;need=true;}
+ const ops=$('ops');ops.hidden=!(tool==='edit'&&sel.size&&canEdit()&&!PV.on);if(!ops.hidden)$('opsLbl').textContent=`${S.g}m 칸 ${sel.size}개`;need=true;}
 function updateHover(){if(!hover){hovLine.visible=false;need=true;return}hovLine.visible=true;const o=outlineGeo(new Set([hover.key]),hover.g,false);setLines(hovLine,o.lines);need=true;}
 
 /* ───────── 건물 ───────── */
@@ -478,11 +488,12 @@ function judge(b){const f=footprint(b),t=TK[b.t],land=S.R+S.storm;
  if(f.mn<land)return{f,c:'mid',txt:dz>0.05?`조상대 · 단차 ${dz.toFixed(1)}m`:'조상대 · 폭풍 때 젖음'};
  if(dz>0.05)return{f,c:'mid',txt:`대지 · 단차 ${dz.toFixed(1)}m 기단`};
  return{f,c:'ok',txt:'대지 위'};}
+const bcol=c=>c==='mid'?'--b-mid':c==='hi'?'--b-hi':'--b-ok';
 function boxEdges(w,h,d,x,y,z,mat){const l=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(w,h,d)),mat);l.position.set(x,y,z);return l;}
 function rebuildBlocks(){while(bGroup.children.length){const c=bGroup.children.pop();c.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material&&o.material!==edgeMat&&o.material!==edgeSel&&o.material.dispose)o.material.dispose()})}
- const e=S.exag,th=S.theta*PI/180;
+ const e=EX(),th=S.theta*PI/180;
  blocks.forEach((b,idx)=>{const t=TK[b.t];if(!t)return;const J=judge(b),f=J.f,g=new THREE.Group();const[bx,bz]=bWorld(b);g.position.set(bx,0,bz);g.rotation.y=-th;
-  const em=idx===bsel?edgeSel:edgeMat;const roofC=C.mass.clone();if(S.statusTint&&J.c!=='ok')roofC.lerp(C[J.c],0.28);if(idx===bsel)roofC.lerp(C.acc,0.18);
+  const em=idx===bsel?edgeSel:edgeMat;const roofC=(S.statusTint?C[bcol(J.c).slice(2)]:C['b-ok']).clone();if(idx===bsel)roofC.lerp(C.acc,0.35);
   const mat=new THREE.MeshLambertMaterial({color:roofC});const add=(m)=>{m.userData.idx=idx;g.add(m)};
   if(t.raised){const fl=J.fl,iw=Math.max(1,f.w-4),id=Math.max(1,f.d-4),hb=t.F*S.floorH;
    const body=new THREE.Mesh(new THREE.BoxGeometry(iw,hb*e,id),mat);body.position.set(0,(fl+hb/2)*e,0);add(body);g.add(boxEdges(iw,hb*e,id,0,(fl+hb/2)*e,0,em));
@@ -498,6 +509,108 @@ function rebuildBlocks(){while(bGroup.children.length){const c=bGroup.children.p
 function addBlock(tk){if(!canEdit())return;pushUndo();let u=half,v=half;const r=cv.getBoundingClientRect();const h=pickGround({clientX:r.left+r.width/2,clientY:r.top+r.height/2});
  if(h&&inSite[h.k]){[u,v]=w2g(h.x,h.z);}const b={t:tk,u,v,rot:0};snapB(b);blocks.push(b);bsel=blocks.length-1;setTool('bld');rebuildBlocks();changed(false);markDirty();renderPalette();}
 
+/* ───────── 길·회랑·면 ───────── */
+let paths=[],psel=-1,drawing=null,pcur=null;
+const pGroup=new THREE.Group();scene.add(pGroup);
+const postGeo=new THREE.BoxGeometry(1,1,1),postMat=new THREE.MeshLambertMaterial({color:0x333333});
+const prevLine=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({depthTest:false,transparent:true}));prevLine.renderOrder=10;prevLine.visible=false;scene.add(prevLine);
+function gH(x,z){const j=Math.floor(x+N/2),i=Math.floor(z+N/2);if(i<0||j<0||i>=N||j>=N)return S.seabed;return D[i*N+j];}
+function snapPt(x,z){const g=Number(S.pSnap)||1;let[u,v]=w2g(x,z);u=Math.round(u/g)*g;v=Math.round(v/g)*g;return g2w(u,v);}
+function densify(pts,step){const out=[];for(let a=0;a<pts.length-1;a++){const[x0,z0]=pts[a],[x1,z1]=pts[a+1],L=Math.hypot(x1-x0,z1-z0),n=Math.max(1,Math.ceil(L/step));for(let s=0;s<n;s++){const t=s/n;out.push([x0+(x1-x0)*t,z0+(z1-z0)*t]);}}out.push(pts[pts.length-1]);return out;}
+function ribbon(pts,w,yf){const P=densify(pts,1),L=[],R=[];for(let a=0;a<P.length;a++){const p0=P[Math.max(0,a-1)],p1=P[Math.min(P.length-1,a+1)];let tx=p1[0]-p0[0],tz=p1[1]-p0[1];const l=Math.hypot(tx,tz)||1;tx/=l;tz/=l;const nx=-tz,nz=tx,y=yf(P[a]);L.push([P[a][0]+nx*w/2,y,P[a][1]+nz*w/2]);R.push([P[a][0]-nx*w/2,y,P[a][1]-nz*w/2]);}
+ const tri=[],edge=[];for(let a=0;a<P.length-1;a++){tri.push(...L[a],...R[a],...R[a+1],...L[a],...R[a+1],...L[a+1]);edge.push(...L[a],...L[a+1],...R[a],...R[a+1]);}
+ edge.push(...L[0],...R[0],...L[P.length-1],...R[P.length-1]);return{tri,edge,L,R,P};}
+function inPoly(x,z,pts){let c=false;for(let a=0,b=pts.length-1;a<pts.length;b=a++){const[xa,za]=pts[a],[xb,zb]=pts[b];if((za>z)!==(zb>z)&&x<(xb-xa)*(z-za)/(zb-za)+xa)c=!c;}return c;}
+function areaY(pts){let mx=-1e9,x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;for(const[x,z]of pts){x0=Math.min(x0,x);x1=Math.max(x1,x);z0=Math.min(z0,z);z1=Math.max(z1,z);mx=Math.max(mx,gH(x,z));}
+ for(let i=Math.max(0,Math.floor(z0+N/2));i<=Math.min(N-1,Math.ceil(z1+N/2));i++)for(let j=Math.max(0,Math.floor(x0+N/2));j<=Math.min(N-1,Math.ceil(x1+N/2));j++)if(inPoly(cx(j),cz(i),pts))mx=Math.max(mx,D[i*N+j]);return mx;}
+function pathGeo(p,e){const tri=[],edge=[],posts=[];
+ if(p.kind==='area'){if(p.pts.length<3)return{tri,edge,posts};
+  if(p.mode!=='deck'){let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;for(const[x,z]of p.pts){x0=Math.min(x0,x);x1=Math.max(x1,x);z0=Math.min(z0,z);z1=Math.max(z1,z);}
+   for(let i=Math.max(0,Math.floor(z0+N/2));i<=Math.min(N-1,Math.ceil(z1+N/2));i++)for(let j=Math.max(0,Math.floor(x0+N/2));j<=Math.min(N-1,Math.ceil(x1+N/2));j++){const x=cx(j),z=cz(i);if(!inSite[i*N+j]||!inPoly(x,z,p.pts))continue;const y=(D[i*N+j]+0.06)*e;tri.push(x-.5,y,z-.5,x-.5,y,z+.5,x+.5,y,z+.5,x-.5,y,z-.5,x+.5,y,z+.5,x+.5,y,z-.5);}
+   const P=densify(p.pts.concat([p.pts[0]]),1);for(let a=0;a<P.length-1;a++)edge.push(P[a][0],(gH(P[a][0],P[a][1])+0.08)*e,P[a][1],P[a+1][0],(gH(P[a+1][0],P[a+1][1])+0.08)*e,P[a+1][1]);return{tri,edge,posts};}
+  const y=p.el;let f=[];try{f=THREE.ShapeUtils.triangulateShape(p.pts.map(q=>new THREE.Vector2(q[0],q[1])),[]);}catch(err){f=[];}
+  for(const t of f)for(const k of t)tri.push(p.pts[k][0],y*e,p.pts[k][1]);for(let a=0;a<p.pts.length;a++){const q0=p.pts[a],q1=p.pts[(a+1)%p.pts.length];edge.push(q0[0],y*e,q0[1],q1[0],y*e,q1[1]);}
+  if(p.mode==='deck'){const P=densify(p.pts.concat([p.pts[0]]),1);for(let a=0;a<P.length-1;a+=4){const g=gH(P[a][0],P[a][1]);if(p.el>g+0.2)posts.push([P[a][0],P[a][1],g,p.el]);}}
+  return{tri,edge,posts};}
+ if(p.pts.length<2)return{tri,edge,posts};const deck=p.mode==='deck';const r=ribbon(p.pts,p.w,q=>deck?p.el*e:(gH(q[0],q[1])+0.06)*e);
+ if(deck)for(let a=0;a<r.P.length;a+=4)for(const s2 of[r.L[a],r.R[a]]){const g=gH(s2[0],s2[2]);if(p.el>g+0.2)posts.push([s2[0],s2[2],g,p.el]);}
+ return{tri:r.tri,edge:r.edge,posts};}
+function rebuildPaths(){while(pGroup.children.length){const c=pGroup.children.pop();if(c.geometry&&c.geometry!==postGeo)c.geometry.dispose();if(c.material&&c.material!==edgeMat&&c.material!==edgeSel&&c.material!==postMat)c.material.dispose();}
+ const e=EX();paths.forEach((p,idx)=>{const g=pathGeo(p,e);if(!g.tri.length)return;const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(g.tri),3));geo.computeVertexNormals();
+  const col=new THREE.Color(PCOL[p.col]?PCOL[p.col][1]:'#cccccc');if(idx===psel)col.lerp(C.acc,0.3);
+  const m=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({color:col,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));m.userData.pidx=idx;m.renderOrder=4;pGroup.add(m);
+  const ln=new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array(g.edge),3)),idx===psel?edgeSel:edgeMat);ln.position.y=0.04;pGroup.add(ln);
+  for(const q of g.posts){const hh=Math.max(0.05,(q[3]-q[2])*e);const c=new THREE.Mesh(postGeo,postMat);c.scale.set(0.3,hh,0.3);c.position.set(q[0],q[2]*e+hh/2,q[1]);pGroup.add(c);}});need=true;}
+function pickPath(ev){ray.ray.copy(rayAt(ev));const hits=ray.intersectObjects(pGroup.children,false).filter(h=>h.object.isMesh&&h.object.userData.pidx!=null);return hits.length?hits[0].object.userData.pidx:-1;}
+function updatePrev(){if(!drawing||PV.on){prevLine.visible=false;need=true;return}const e=EX(),pts=drawing.pts.slice();if(pcur)pts.push(pcur);if(S.pKind==='area'&&pts.length>2)pts.push(pts[0]);
+ const a=[];for(const q of pts){const y=(S.pMode==='deck'?S.pEl:gH(q[0],q[1]))*e+0.25;a.push(q[0],y,q[1]);}prevLine.geometry.dispose();prevLine.geometry=new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array(a),3));prevLine.visible=true;need=true;}
+function finishPath(){if(!drawing)return;const minP=S.pKind==='area'?3:2,pts=drawing.pts;drawing=null;pcur=null;updatePrev();
+ if(pts.length<minP){undoStack.pop();updUR();toast(S.pKind==='area'?'면은 점이 3개 이상 필요해요':'길은 점이 2개 이상 필요해요',true);return}
+ const n=paths.filter(p=>p.kind===S.pKind).length+1;paths.push({kind:S.pKind,pts,w:S.pW,col:S.pCol,mode:S.pMode,el:S.pEl,name:(S.pKind==='area'?'면 ':'길 ')+n});psel=-1;renderPaths();changed(false);markDirty();toast('그렸어요. 바로 다음 것을 그릴 수 있어요. 고치려면 그린 것을 클릭하세요');}
+function cancelPath(){if(!drawing)return;drawing=null;pcur=null;undoStack.pop();updUR();updatePrev();}
+function pathLen(p){let L=0;for(let a=0;a<p.pts.length-1;a++)L+=Math.hypot(p.pts[a+1][0]-p.pts[a][0],p.pts[a+1][1]-p.pts[a][1]);return L;}
+function polyArea(pts){let s2=0;for(let a=0;a<pts.length;a++){const[x0,z0]=pts[a],[x1,z1]=pts[(a+1)%pts.length];s2+=x0*z1-x1*z0;}return Math.abs(s2)/2;}
+function pathArea(p){return p.kind==='area'?polyArea(p.pts):pathLen(p)*p.w;}
+function initPathCtl(){const w=$('pCols');if(!w)return;w.innerHTML=PCOL.map((c,i)=>`<button class="swb" data-pc="${i}" title="${c[0]}" aria-label="${c[0]}" style="background:${c[1]}"></button>`).join('')+'<span class="muted" id="pColN" style="font-size:12px"></span>';
+ w.querySelectorAll('[data-pc]').forEach(b=>b.onclick=()=>{S.pCol=Number(b.dataset.pc);applyPathCtl();});
+ ['pKind','pW','pMode','pEl','pSnap'].forEach(id=>$(id).onchange=()=>{const v=$(id).value;S[id]=(id==='pKind'||id==='pMode')?v:Number(v);applyPathCtl();});
+ $('pDel').onclick=delPath;$('pDesel').onclick=()=>{psel=-1;rebuildPaths();renderPaths();sync();};syncPathCtl();renderPaths();}
+function syncPathCtl(){if(!$('pKind'))return;$('pKind').value=S.pKind;$('pW').value=S.pW;$('pMode').value=S.pMode;$('pEl').value=S.pEl;$('pSnap').value=String(S.pSnap);document.querySelectorAll('[data-pc]').forEach(b=>b.setAttribute('aria-pressed',Number(b.dataset.pc)===S.pCol));const cn=$('pColN');if(cn)cn.textContent=PCOL[S.pCol]?PCOL[S.pCol][0]:'';$('pDel').disabled=psel<0;const lb=$('pCtlLbl');if(lb)lb.innerHTML=psel>=0&&paths[psel]?`<b>${esc(paths[psel].name)}</b>을(를) 고르는 중 · 아래 값을 바꾸면 이 길·면이 바로 바뀌어요`:'새로 그릴 길·면의 설정이에요. 이미 그린 것을 고치려면 화면에서 클릭하세요.';}
+function applyPathCtl(){if(!canEdit())return;S.pW=Math.max(0.5,Math.min(30,Number(S.pW)||3));S.pEl=Number(S.pEl)||0;
+ if(psel>=0&&paths[psel]){pushUndo();const p=paths[psel];p.w=S.pW;p.col=S.pCol;p.mode=S.pMode;p.el=S.pEl;if(S.pKind!==p.kind){if(S.pKind==='path'||p.pts.length>=3)p.kind=S.pKind;else{S.pKind=p.kind;toast('점이 3개 이상이어야 면으로 바꿀 수 있어요',true);}}}
+ syncPathCtl();rebuildPaths();updatePrev();renderPaths();renderStats();markDirty();sync();}
+function loadPathCtl(){const p=paths[psel];if(!p)return;S.pKind=p.kind;S.pW=p.w;S.pCol=p.col;S.pMode=p.mode;S.pEl=p.el;syncPathCtl();}
+function renderPaths(){const e=$('plist');if(e){e.innerHTML=paths.length?paths.map((p,i)=>`<button class="bi${i===psel?' sel':''}" data-p="${i}"><span><span class="sw" style="background:${PCOL[p.col]?PCOL[p.col][1]:'#ccc'}"></span>${esc(p.name)}<br><small>${p.kind==='area'?'면':'폭 '+p.w+'m · 길이 '+fmt(pathLen(p))+'m'} · ${fmt(pathArea(p))}㎡ · ${p.mode==='deck'?'EL '+el(p.el)+' 데크':'지형 따라'}</small></span></button>`).join(''):'<p class="note">아직 그린 길·면이 없어요.</p>';
+ e.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{if(!canEdit())return;const i=Number(b.dataset.p);if(tool!=='path')setTool('path');psel=i;loadPathCtl();rebuildPaths();renderPaths();sync();});}syncPathCtl();renderPathStats();}
+function renderPathStats(){const e=$('kv4');if(!e)return;const np=paths.filter(p=>p.kind==='path'),na=paths.filter(p=>p.kind==='area');$('sP').textContent=paths.length+'개';
+ e.innerHTML=paths.length?`<dt>길 ${np.length}개 · 길이 합</dt><dd>${fmt(np.reduce((a,p)=>a+pathLen(p),0))}m</dd><dt>길 면적 합</dt><dd>${fmt(np.reduce((a,p)=>a+pathArea(p),0))}㎡</dd><dt>면 ${na.length}개 · 면적 합</dt><dd>${fmt(na.reduce((a,p)=>a+pathArea(p),0))}㎡</dd>`:'<dt>위 도구 길·면으로 그려요</dt><dd></dd>';}
+function delPath(){if(!canEdit()||psel<0)return;pushUndo();paths.splice(psel,1);psel=-1;renderPaths();changed(false);markDirty();}
+
+/* ───────── 녹화 ───────── */
+const Rec={mr:null,chunks:[],mode:'',t0:0,dur:0,y0:0};
+function recMime(){if(!window.MediaRecorder||!MediaRecorder.isTypeSupported)return'';for(const m of['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm','video/mp4'])if(MediaRecorder.isTypeSupported(m))return m;return'';}
+function uiRec(){const on=!!Rec.mr;$('recbadge').hidden=!on;if($('recGo'))$('recGo').disabled=on;if($('recStop'))$('recStop').disabled=!on;}
+function recStart(){if(Rec.mr)return;if(!cv.captureStream||!window.MediaRecorder){toast('이 브라우저는 화면 녹화를 지원하지 않아요. 크롬이나 엣지에서 열어 주세요',true);return}
+ const mime=recMime();let mr;try{mr=new MediaRecorder(cv.captureStream(30),mime?{mimeType:mime,videoBitsPerSecond:8e6}:{});}catch(e){toast('녹화를 시작하지 못했어요',true);return}
+ Rec.mr=mr;Rec.chunks=[];Rec.mode=$('recMode').value;Rec.t0=performance.now();Rec.dur=Rec.mode==='tide'?PERIOD*1000:Rec.mode==='orbit'?12000:0;Rec.y0=PV.on?PV.h:V.yaw;
+ const hide=[selLine,selFill,hovLine,prevLine];Rec.vis=hide.map(o=>o.visible);hide.forEach(o=>o.visible=false);
+ mr.ondataavailable=e=>{if(e.data&&e.data.size)Rec.chunks.push(e.data)};
+ mr.onstop=()=>{const type=(mr.mimeType||mime||'video/webm').split(';')[0],ext=type.includes('mp4')?'mp4':'webm',blob=new Blob(Rec.chunks,{type});const md=Rec.mode;Rec.mr=null;uiRec();[selLine,selFill,hovLine,prevLine].forEach((o,i)=>o.visible=Rec.vis?Rec.vis[i]:o.visible);need=true;
+  if(!blob.size){toast('녹화된 내용이 없어요',true);return}saveFile(`${fname()}_${md==='tide'?'조석':md==='orbit'?'회전':'녹화'}.${ext}`,blob);};
+ if(Rec.mode==='tide'){tPhase=0;setWater(waterFromPhase(0),true);playing=true;lastT=performance.now();$('play').textContent='❚❚ 멈춤';}
+ mr.start(250);uiRec();toast(Rec.dur?`${Rec.dur/1000}초 동안 녹화해요`:'녹화 중이에요. 멈춤을 누르면 저장해요');}
+function recStop(){if(!Rec.mr)return;const md=Rec.mode;if(Rec.mr.state!=='inactive')Rec.mr.stop();if(md==='tide')stopPlay();}
+
+/* ───────── SketchUp DAE ───────── */
+function zoneOf(h){return h<0?0:h<S.R?1:h<S.R+S.storm?2:3;}
+function terrainQuads(cb){if(S.mode==='step'){for(let i=0;i<N;i++)for(let j=0;j<N;j++){const h=D[i*N+j];if(h<=S.seabed+1e-6)continue;const x=cx(j),z=cz(i),zn=zoneOf(h);cb(zn,[x-.5,h,z-.5],[x-.5,h,z+.5],[x+.5,h,z+.5],[x+.5,h,z-.5]);
+   for(const[a,b,x1,z1,x2,z2]of[[0,1,x+.5,z-.5,x+.5,z+.5],[0,-1,x-.5,z+.5,x-.5,z-.5],[1,0,x+.5,z+.5,x-.5,z+.5],[-1,0,x-.5,z-.5,x+.5,z-.5]]){const ii=i+a,jj=j+b,hn=(ii>=0&&ii<N&&jj>=0&&jj<N)?D[ii*N+jj]:S.seabed;if(hn<h-1e-6)cb(zn,[x1,h,z1],[x1,hn,z1],[x2,hn,z2],[x2,h,z2]);}}}
+ else for(let i=0;i<N-1;i++)for(let j=0;j<N-1;j++){const a=D[i*N+j],b=D[i*N+j+1],c=D[(i+1)*N+j+1],d=D[(i+1)*N+j];if(Math.max(a,b,c,d)<=S.seabed+1e-6)continue;cb(zoneOf((a+b+c+d)/4),[cx(j),a,cz(i)],[cx(j),d,cz(i+1)],[cx(j+1),c,cz(i+1)],[cx(j+1),b,cz(i)]);}}
+function boxTris(tr,cs,y0,y1){const B=cs.map(c=>[c[0],y0,c[1]]),T=cs.map(c=>[c[0],y1,c[1]]);const qd=(a,b,c,d)=>tr.push(...a,...b,...c,...a,...c,...d);qd(B[0],B[3],B[2],B[1]);qd(T[0],T[1],T[2],T[3]);for(let i=0;i<4;i++){const j=(i+1)%4;qd(B[i],B[j],T[j],T[i]);}}
+const sq=(x,z,r)=>[[x-r,z-r],[x+r,z-r],[x+r,z+r],[x-r,z+r]];
+function daeObjects(){const T=[[],[],[],[]];terrainQuads((zn,a,b,c,d)=>{T[zn].push(...a,...b,...c,...a,...c,...d);});
+ const hN=N/2,sb=S.seabed;T[0].push(-hN,sb,-hN,-hN,sb,hN,hN,sb,hN,-hN,sb,-hN,hN,sb,hN,hN,sb,-hN);
+ const mats=[{id:'m_sub',name:'조하대',c:C['z-sub']},{id:'m_int',name:'조간대',c:C['z-int']},{id:'m_sup',name:'조상대',c:C['z-sup']},{id:'m_land',name:'대지',c:C['z-land']},{id:'m_bok',name:'건물_가능',c:C['b-ok']},{id:'m_bmid',name:'건물_주의',c:C['b-mid']},{id:'m_bhi',name:'건물_잠김',c:C['b-hi']},{id:'m_post',name:'기둥',c:new THREE.Color('#3a3a40')},{id:'m_plinth',name:'기단',c:C.plinth}];
+ PCOL.forEach((p,i)=>mats.push({id:'m_p'+i,name:'길_'+p[0],c:new THREE.Color(p[1])}));
+ const objs=[];['조하대','조간대','조상대','대지'].forEach((n,i)=>{if(T[i].length)objs.push({name:'지형_'+n,mat:mats[i].id,tris:T[i]});});
+ const th=S.theta*PI/180,co=Math.cos(th),si=Math.sin(th);
+ blocks.forEach((b,n)=>{const J=judge(b),t=TK[b.t],[w,d]=dims(b),[bx,bz]=bWorld(b),loc=(lx,lz)=>[bx+co*lx-si*lz,bz+si*lx+co*lz];const nm=t.name.split(' · ')[0]+'_'+(n+1),mt=J.c==='mid'?'m_bmid':J.c==='hi'?'m_bhi':'m_bok';
+  if(t.raised){const iw=Math.max(1,w-4),id=Math.max(1,d-4),hb=t.F*S.floorH,tr=[];boxTris(tr,[[-iw/2,-id/2],[iw/2,-id/2],[iw/2,id/2],[-iw/2,id/2]].map(q=>loc(q[0],q[1])),J.fl,J.fl+hb);boxTris(tr,[[-w/2,-d/2],[w/2,-d/2],[w/2,d/2],[-w/2,d/2]].map(q=>loc(q[0],q[1])),J.fl+hb,J.fl+hb+0.35);objs.push({name:nm,mat:mt,tris:tr});
+   const pt=[],nx=Math.max(1,Math.round(iw/4)),nz=Math.max(1,Math.round(id/4));for(let a=0;a<=nx;a++)for(let c=0;c<=nz;c++){if(a>0&&a<nx&&c>0&&c<nz)continue;const[wx,wz]=loc(-iw/2+a*iw/nx,-id/2+c*id/nz),gy=gH(wx,wz);if(J.fl>gy+0.1)boxTris(pt,sq(wx,wz,0.2),gy,J.fl);}if(pt.length)objs.push({name:nm+'_기둥',mat:'m_post',tris:pt});}
+  else{const cs=[[-w/2,-d/2],[w/2,-d/2],[w/2,d/2],[-w/2,d/2]].map(q=>loc(q[0],q[1])),tr=[];boxTris(tr,cs,J.f.mx,J.f.mx+t.F*S.floorH);objs.push({name:nm,mat:mt,tris:tr});if(J.f.mx-J.f.mn>0.05){const pl=[];boxTris(pl,cs,J.f.mn,J.f.mx);objs.push({name:nm+'_기단',mat:'m_plinth',tris:pl});}}});
+ paths.forEach((p,n)=>{const g=pathGeo(p,1);if(g.tri.length)objs.push({name:p.name.replace(/\s/g,'_'),mat:'m_p'+(PCOL[p.col]?p.col:0),tris:g.tri});if(g.posts.length){const tr=[];g.posts.forEach(q=>boxTris(tr,sq(q[0],q[1],0.15),q[2],q[3]));objs.push({name:p.name.replace(/\s/g,'_')+'_기둥',mat:'m_post',tris:tr});}});
+ return{objs,mats};}
+function daeXml(objs,mats){const f=n=>String(Math.round(n*1000)/1000),used=new Set(objs.map(o=>o.mat)),M=mats.filter(m=>used.has(m.id)),iso=new Date().toISOString();
+ const eff=M.map(m=>`<effect id="e_${m.id}"><profile_COMMON><technique sid="c"><lambert><diffuse><color>${m.c.r.toFixed(4)} ${m.c.g.toFixed(4)} ${m.c.b.toFixed(4)} 1</color></diffuse></lambert></technique></profile_COMMON></effect>`).join('');
+ const mat=M.map(m=>`<material id="${m.id}" name="${esc(m.name)}"><instance_effect url="#e_${m.id}"/></material>`).join('');
+ const geo=[],nodes=[];objs.forEach((o,i)=>{const a=o.tris,nv=a.length/3,pos=new Array(a.length);for(let k=0;k<a.length;k++)pos[k]=f(a[k]);const ia=new Array(nv);for(let k=0;k<nv;k++)ia[k]=k;
+  geo.push(`<geometry id="g${i}" name="${esc(o.name)}"><mesh><source id="g${i}p"><float_array id="g${i}a" count="${a.length}">${pos.join(' ')}</float_array><technique_common><accessor source="#g${i}a" count="${nv}" stride="3"><param name="X" type="float"/><param name="Y" type="float"/><param name="Z" type="float"/></accessor></technique_common></source><vertices id="g${i}v"><input semantic="POSITION" source="#g${i}p"/></vertices><triangles count="${nv/3}" material="mt"><input semantic="VERTEX" source="#g${i}v" offset="0"/><p>${ia.join(' ')}</p></triangles></mesh></geometry>`);
+  nodes.push(`<node id="n${i}" name="${esc(o.name)}"><instance_geometry url="#g${i}"><bind_material><technique_common><instance_material symbol="mt" target="#${o.mat}"/></technique_common></bind_material></instance_geometry></node>`);});
+ return `<?xml version="1.0" encoding="utf-8"?>\n<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1"><asset><contributor><authoring_tool>tidal-level</authoring_tool></contributor><created>${iso}</created><modified>${iso}</modified><unit name="meter" meter="1"/><up_axis>Y_UP</up_axis></asset><library_effects>${eff}</library_effects><library_materials>${mat}</library_materials><library_geometries>${geo.join('')}</library_geometries><library_visual_scenes><visual_scene id="s" name="tidal_level">${nodes.join('')}</visual_scene></library_visual_scenes><scene><instance_visual_scene url="#s"/></scene></COLLADA>`;}
+async function exDae(){if(!window.JSZip){say('압축 도구를 불러오지 못했어요',true);return}say('DAE를 만드는 중이에요…');await new Promise(r=>setTimeout(r,40));
+ try{const{objs,mats}=daeObjects(),xml=daeXml(objs,mats),zip=new JSZip();zip.file('tidal_level.dae',xml);zip.file('README.txt',`SketchUp: 파일 → 가져오기 → COLLADA (*.dae)\n단위 m · 원점 사이트 가운데 · 간조 EL 0 · 조차 ${S.R}m\n재질: 조하대·조간대·조상대·대지 / 건물_가능·주의·잠김 / 길 색\n`);
+  saveFile(`대지레벨_DAE_${fname()}.zip`,await zip.generateAsync({type:'blob',compression:'DEFLATE'}));}catch(e){say('DAE를 만들지 못했어요',true);}}
+
 /* ───────── 카메라 ───────── */
 function fitSize(){const r=stage.getBoundingClientRect();return{w:Math.max(10,r.width),h:Math.max(10,r.height)};}
 function spanFor(z){return N*0.6/z;}
@@ -505,31 +618,44 @@ function updateCam(){const{w,h}=fitSize(),asp=w/h,span=spanFor(V.zoom);cam.left=
  const r=1500,cp=Math.cos(V.pitch);cam.position.set(V.tx+r*cp*Math.sin(V.yaw),V.ty+r*Math.sin(V.pitch),V.tz+r*cp*Math.cos(V.yaw));
  if(V.pitch>1.565)cam.up.set(-Math.sin(V.yaw),0,-Math.cos(V.yaw));else cam.up.set(0,1,0);
  cam.lookAt(V.tx,V.ty,V.tz);cam.updateProjectionMatrix();cam.updateMatrixWorld();
- $('cmpG').setAttribute('transform',`rotate(${V.yaw*180/PI})`);need=true;}
+ $('cmpG').setAttribute('transform',`rotate(${V.yaw*180/PI})`);if(PV.on)updatePcam();need=true;}
 function resize(){const{w,h}=fitSize();renderer.setSize(w,h,false);updateCam();}
 new ResizeObserver(()=>{if(!$('editor').hidden)resize()}).observe(stage);
 const VIEWS={se:[PI/4,Math.atan(1/Math.SQRT2)],sw:[-PI/4,Math.atan(1/Math.SQRT2)],nw:[-3*PI/4,Math.atan(1/Math.SQRT2)],ne:[3*PI/4,Math.atan(1/Math.SQRT2)],top:[0,PI/2-1e-4],elev:[0,0.0001]};
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function goView(k){const[y,p]=VIEWS[k];let dy=y-V.yaw;dy=Math.atan2(Math.sin(dy),Math.cos(dy));if(Sync.role==='view')Sync.follow=false;
+function goView(k){if(PV.on)exitPV();const[y,p]=VIEWS[k];let dy=y-V.yaw;dy=Math.atan2(Math.sin(dy),Math.cos(dy));if(Sync.role==='view')Sync.follow=false;
  if(reduce){V.yaw+=dy;V.pitch=p;updateCam();}else animV={y0:V.yaw,y1:V.yaw+dy,p0:V.pitch,p1:p,t0:performance.now()};
  curView=k;document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===k));}
-function centerView(){let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9,h0=1e9,h1=-1e9,n=0;
+function centerView(){if(PV.on)exitPV();let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9,h0=1e9,h1=-1e9,n=0;
  for(let i=0;i<N;i++)for(let j=0;j<N;j++){const k=i*N+j;if(!inSite[k]||D[k]<-1e-6)continue;const x=cx(j),z=cz(i);if(x<x0)x0=x;if(x>x1)x1=x;if(z<z0)z0=z;if(z>z1)z1=z;const h=D[k];if(h<h0)h0=h;if(h>h1)h1=h;n++;}
  blocks.forEach(b=>{const[bx,bz]=bWorld(b),[w,d]=dims(b),r=Math.hypot(w,d)/2;x0=Math.min(x0,bx-r);x1=Math.max(x1,bx+r);z0=Math.min(z0,bz-r);z1=Math.max(z1,bz+r);n++;});
  if(!n){const hs=S.M*S.G/2;x0=z0=-hs;x1=z1=hs;h0=0;h1=0;}
  const{w,h}=fitSize(),asp=w/h,r=Math.hypot(x1-x0,z1-z0)/2+6,need=Math.max(r,r/asp)*(V.pitch>1.5?0.78:0.9);
- V.tx=(x0+x1)/2;V.tz=(z0+z1)/2;V.ty=((h0+h1)/2)*S.exag;V.zoom=Math.max(0.35,Math.min(16,N*0.6/need));
+ V.tx=(x0+x1)/2;V.tz=(z0+z1)/2;V.ty=((h0+h1)/2)*EX();V.zoom=Math.max(0.35,Math.min(16,N*0.6/need));
  if(Sync.role==='view'&&Sync.follow){Sync.follow=false;uiSync();}updateCam();sync();}
+function pvBase(){return Math.max(gH(PV.x,PV.z),W);}
+function updatePcam(){const{w,h}=fitSize();pcam.aspect=w/h;pcam.fov=PV.fov;const y=(pvBase()+PV.eye)*EX(),cp=Math.cos(PV.p);pcam.position.set(PV.x,y,PV.z);pcam.up.set(0,1,0);pcam.lookAt(PV.x-Math.sin(PV.h)*cp,y+Math.sin(PV.p),PV.z-Math.cos(PV.h)*cp);pcam.updateProjectionMatrix();pcam.updateMatrixWorld();$('cmpG').setAttribute('transform',`rotate(${PV.h*180/PI})`);need=true;}
+function applyEx(){setUniforms();updateTerrain();updateWater();updateRefs();rebuildBlocks();rebuildPaths();updateSel();hover=null;updateHover();buildSiteLine();updatePrev();
+ $('pvbar').hidden=!PV.on;$('pvBtn').setAttribute('aria-pressed',PV.on);document.querySelectorAll('[data-view],#centerBtn,#zin,#zout,#secBtn').forEach(b=>b.disabled=PV.on);if(PV.on&&!$('secp').hidden)showSec(false);
+ stage.classList.toggle('view',PV.on||tool==='view');renderHelp();renderBadge();if(PV.on)updatePcam();else updateCam();}
+function syncPv(){$('pvFov').value=PV.fov;$('pvFovV').textContent=Math.round(PV.fov)+'°';if(document.activeElement!==$('pvEye'))$('pvEye').value=PV.eye;if(document.activeElement!==$('pvSpd'))$('pvSpd').value=PV.speed;}
+function enterPV(x,z){if(PV.on)return;cancelPath();PV.on=true;PV.x=x;PV.z=z;PV.h=V.yaw;PV.p=-0.04;syncPv();applyEx();toast('사람 시점이에요. 드래그로 둘러보고 W A S D로 걸어요. Esc로 나가요');sync();}
+function exitPV(){if(!PV.on)return;PV.on=false;keys.clear();applyEx();sync();}
+$('pvBtn').onclick=()=>{if(PV.on)exitPV();else enterPV(V.tx,V.tz);};$('pvExit').onclick=exitPV;
+$('pvFov').oninput=()=>{PV.fov=Number($('pvFov').value);syncPv();updatePcam();sync();};
+$('pvEye').onchange=()=>{const v=Number($('pvEye').value);if(!isNaN(v))PV.eye=Math.max(0.5,Math.min(20,v));syncPv();updatePcam();sync();};
+$('pvSpd').onchange=()=>{const v=Number($('pvSpd').value);if(!isNaN(v))PV.speed=Math.max(0.5,Math.min(30,v));syncPv();};
+addEventListener('blur',()=>keys.clear());
 function camAxes(){const r=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0),u=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,1);return[r,u];}
-function zoomAt(f,ev){const w0=cam.right,h0=cam.top;V.zoom=Math.max(0.35,Math.min(16,V.zoom*f));
+function zoomAt(f,ev){if(PV.on)return;const w0=cam.right,h0=cam.top;V.zoom=Math.max(0.35,Math.min(16,V.zoom*f));
  if(ev){const r=cv.getBoundingClientRect(),nx=((ev.clientX-r.left)/r.width)*2-1,ny=-((ev.clientY-r.top)/r.height)*2+1;const{w,h}=fitSize(),asp=w/h,sp=spanFor(V.zoom);
   const[ra,ua]=camAxes();const dx=nx*(w0-sp*asp),dy=ny*(h0-sp);V.tx+=ra.x*dx+ua.x*dy;V.ty+=ra.y*dx+ua.y*dy;V.tz+=ra.z*dx+ua.z*dy;}
  updateCam();}
 
 /* ───────── 피킹 ───────── */
 const ray=new THREE.Raycaster();
-function rayAt(ev){const r=cv.getBoundingClientRect();ray.setFromCamera(new THREE.Vector2((ev.clientX-r.left)/r.width*2-1,-(ev.clientY-r.top)/r.height*2+1),cam);return ray.ray;}
-function pickGround(ev){const R=rayAt(ev),o=R.origin.clone(),d=R.direction.clone(),e=S.exag,hN=N/2,top=(ceilEL()+1)*e,bot=(S.seabed-0.5)*e;
+function rayAt(ev){const r=cv.getBoundingClientRect();ray.setFromCamera(new THREE.Vector2((ev.clientX-r.left)/r.width*2-1,-(ev.clientY-r.top)/r.height*2+1),AC());return ray.ray;}
+function pickGround(ev){const R=rayAt(ev),o=R.origin.clone(),d=R.direction.clone(),e=EX(),hN=N/2,top=(ceilEL()+1)*e,bot=(S.seabed-0.5)*e;
  let t=d.y<-1e-4?(top-o.y)/d.y:0;if(t<0)t=0;const p=o.clone().addScaledVector(d,t);const step=0.3;
  for(let s=0;s<20000;s++){if(p.y<bot)break;const j=Math.floor(p.x+hN),i=Math.floor(p.z+hN);
   if(i>=0&&i<N&&j>=0&&j<N){if(p.y<=D[i*N+j]*e+1e-3)return{i,j,k:i*N+j,x:p.x,z:p.z};}
@@ -560,9 +686,14 @@ let drag=null,spaceDown=false;
 cv.addEventListener('contextmenu',e=>e.preventDefault());
 cv.addEventListener('mousedown',e=>{if(e.button===1)e.preventDefault()});cv.addEventListener('auxclick',e=>{if(e.button===1)e.preventDefault()});
 cv.addEventListener('pointerdown',ev=>{cv.setPointerCapture(ev.pointerId);if(ev.button===1)ev.preventDefault();
+ if(PV.on){drag={k:'look',x:ev.clientX,y:ev.clientY};if(Sync.role==='view'&&Sync.follow){Sync.follow=false;uiSync();}return}
  const pan=(ev.button===0&&ev.altKey)||(ev.button===2&&ev.shiftKey);
  const orbit=!pan&&(ev.button===1||ev.button===2||tool==='view'||spaceDown||!canEdit());
  if(pan||orbit){drag={k:pan?'pan':'orbit',x:ev.clientX,y:ev.clientY};animV=null;if(Sync.role==='view'&&Sync.follow){Sync.follow=false;uiSync();}return}
+ if(tool==='path'){if(!drawing){const pi=pickPath(ev);if(pi>=0){psel=pi;loadPathCtl();rebuildPaths();renderPaths();sync();return}}
+  const h=pickGround(ev);if(!h){if(!drawing&&psel>=0){psel=-1;rebuildPaths();renderPaths();sync();}return}
+  const pt=snapPt(h.x,h.z);if(!drawing){if(psel>=0){psel=-1;rebuildPaths();renderPaths();}pushUndo();drawing={pts:[]};}
+  const last=drawing.pts[drawing.pts.length-1];if(!last||Math.hypot(last[0]-pt[0],last[1]-pt[1])>0.01)drawing.pts.push(pt);pcur=pt;updatePrev();return}
  if(tool==='bld'){const bi=pickBlock(ev);if(bi>=0){pushUndo();bsel=bi;const h=pickGround(ev);const b=blocks[bi];const g=h?w2g(h.x,h.z):[b.u,b.v];drag={k:'block',ou:b.u-g[0],ov:b.v-g[1],moved:false};rebuildBlocks();renderStats();sync();return}
   bsel=-1;rebuildBlocks();renderStats();sync();return}
  const h=pickGround(ev);
@@ -573,7 +704,9 @@ cv.addEventListener('pointerdown',ev=>{cv.setPointerCapture(ev.pointerId);if(ev.
   else if(!(sel.size===1&&sel.has(key))){sel.clear();sel.add(key);}
   drag={k:'sel',last:key};updateSel();sync();}});
 cv.addEventListener('pointermove',ev=>{
- if(!drag){if((tool==='edit'||tool==='area')&&canEdit()){const h=pickGround(ev);const g=tool==='area'?S.G:S.g;const nh=h&&inSite[h.k]?{key:cellOf(h.k,g),g}:null;if((nh&&nh.key)!==(hover&&hover.key)){hover=nh;updateHover();}}return}
+ if(!drag&&tool==='path'&&drawing&&!PV.on){const h=pickGround(ev);if(h){pcur=snapPt(h.x,h.z);updatePrev();}return}
+ if(!drag){if((tool==='edit'||tool==='area')&&canEdit()&&!PV.on){const h=pickGround(ev);const g=tool==='area'?S.G:S.g;const nh=h&&inSite[h.k]?{key:cellOf(h.k,g),g}:null;if((nh&&nh.key)!==(hover&&hover.key)){hover=nh;updateHover();}}return}
+ if(drag.k==='look'){const dx=ev.clientX-drag.x,dy=ev.clientY-drag.y;drag.x=ev.clientX;drag.y=ev.clientY;PV.h-=dx*0.004;PV.p=Math.max(-1.45,Math.min(1.45,PV.p-dy*0.004));updatePcam();sync();return}
  if(drag.k==='orbit'){const dx=ev.clientX-drag.x,dy=ev.clientY-drag.y;drag.x=ev.clientX;drag.y=ev.clientY;V.yaw-=dx*0.008;V.pitch=Math.max(0.0001,Math.min(PI/2-1e-4,V.pitch+dy*0.006));curView='';document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed','false'));updateCam();sync();return}
  if(drag.k==='pan'){const dx=ev.clientX-drag.x,dy=ev.clientY-drag.y;drag.x=ev.clientX;drag.y=ev.clientY;const{h}=fitSize(),m=(cam.top-cam.bottom)/h;const[ra,ua]=camAxes();
   V.tx-=ra.x*dx*m-ua.x*dy*m;V.ty-=ra.y*dx*m-ua.y*dy*m;V.tz-=ra.z*dx*m-ua.z*dy*m;updateCam();sync();return}
@@ -584,8 +717,9 @@ cv.addEventListener('pointermove',ev=>{
  if(drag.k==='sel'){const key=cellOf(h.k,S.g);if(key===drag.last)return;drag.last=key;sel.add(key);updateSel();sync();}});
 function endDrag(){if(!drag)return;const k=drag.k,mv=drag.moved;drag=null;if(k==='block'){if(mv){changed(false);markDirty();}else{undoStack.pop();updUR();}}if(k==='area'){markDirty();changed(true);}}
 cv.addEventListener('pointerup',endDrag);cv.addEventListener('pointercancel',endDrag);
+cv.addEventListener('dblclick',ev=>{if(tool==='path'&&drawing){finishPath();return}if(PV.on||tool==='path')return;const h=pickGround(ev);if(h)enterPV(h.x,h.z);});
 cv.addEventListener('pointerleave',()=>{if(hover){hover=null;updateHover()}});
-cv.addEventListener('wheel',ev=>{ev.preventDefault();if(Sync.role==='view'&&Sync.follow){Sync.follow=false;uiSync();}zoomAt(Math.exp(-ev.deltaY*0.0012),ev);sync();},{passive:false});
+cv.addEventListener('wheel',ev=>{ev.preventDefault();if(PV.on){PV.fov=Math.max(15,Math.min(120,PV.fov*Math.exp(ev.deltaY*0.001)));syncPv();updatePcam();sync();return}if(Sync.role==='view'&&Sync.follow){Sync.follow=false;uiSync();}zoomAt(Math.exp(-ev.deltaY*0.0012),ev);sync();},{passive:false});
 $('centerBtn').onclick=centerView;$('zin').onclick=()=>{zoomAt(1.25);sync()};$('zout').onclick=()=>{zoomAt(1/1.25);sync()};
 function afterFoot(){if(!edited){genBase();touch();updateTerrain();updateRefs();updateWater();}updateSel();renderStats();renderFootNote();sync();}
 addEventListener('keydown',ev=>{if($('editor').hidden)return;
@@ -593,27 +727,30 @@ addEventListener('keydown',ev=>{if($('editor').hidden)return;
  if(ev.target.closest&&ev.target.closest('input,select,textarea'))return;
  if((ev.ctrlKey||ev.metaKey)&&(ev.key.toLowerCase()==='y'||(ev.key.toLowerCase()==='z'&&ev.shiftKey))){ev.preventDefault();redo();return}
  if((ev.ctrlKey||ev.metaKey)&&ev.key.toLowerCase()==='z'){ev.preventDefault();undo();return}
+ if(PV.on){const k=ev.key.toLowerCase();if(['w','a','s','d','q','e','arrowup','arrowdown','arrowleft','arrowright'].includes(k)){keys.add(k);ev.preventDefault();return}if(ev.key==='Shift'){keys.add('shift');return}if(ev.key==='Escape'){exitPV();return}return}
  if(ev.code==='Space'){spaceDown=true;stage.classList.add('view');ev.preventDefault();return}
  if(ev.key==='c'||ev.key==='C'){centerView();return}
  if(!canEdit())return;
+ if(tool==='path'){if(ev.key==='Enter'){finishPath();return}if(ev.key==='Escape'){if(drawing)cancelPath();else{psel=-1;rebuildPaths();renderPaths();sync();}return}if(ev.key==='Backspace'){ev.preventDefault();if(drawing){drawing.pts.pop();if(!drawing.pts.length)cancelPath();else updatePrev();}else delPath();return}if(ev.key==='Delete'){delPath();return}}
  const n=Number(ev.key);if(n>=1&&n<=6&&!ev.ctrlKey&&!ev.metaKey&&!ev.altKey){setG(GS[n-1]);return}
  if(ev.key==='Escape'&&!$('secp').hidden&&!sel.size&&bsel<0){showSec(false);return}
  if(ev.key==='Escape'){sel.clear();bsel=-1;updateSel();rebuildBlocks();renderStats();sync();return}
  if(tool==='edit'&&sel.size){if(ev.key==='ArrowUp'){ev.preventDefault();op('up')}else if(ev.key==='ArrowDown'){ev.preventDefault();op('down')}else if(ev.key==='f'||ev.key==='F')op('flat');else if(ev.key==='g'||ev.key==='G')op('smooth');}
  if(bsel>=0&&(ev.key==='r'||ev.key==='R')){pushUndo();const b=blocks[bsel];b.rot^=1;snapB(b);rebuildBlocks();changed(false);markDirty();}
  if(bsel>=0&&(ev.key==='Delete'||ev.key==='Backspace')){pushUndo();blocks.splice(bsel,1);bsel=-1;rebuildBlocks();changed(false);markDirty();renderPalette();}});
-addEventListener('keyup',ev=>{if(ev.code==='Space'){spaceDown=false;if(tool!=='view')stage.classList.remove('view');}});
+addEventListener('keyup',ev=>{keys.delete(ev.key.toLowerCase());if(ev.key==='Shift')keys.delete('shift');if(ev.code==='Space'){spaceDown=false;if(tool!=='view')stage.classList.remove('view');}});
 
 /* 도구 */
 const HELP={area:'<b>영역</b> · 12m 칸을 클릭하면 시작 높이(EL {b})의 땅이 생기고, 다시 누르면 빠져요. 끌면 지나간 칸이 같이 바뀌어요.',
  edit:'<b>편집</b> · 칸을 클릭해 고르고 ▲ ▼ 로 한 단씩 올리고 내려요. Shift+클릭 = 더하기 · 끌기 = 여러 칸 · 숫자 1–6 = 칸 크기 · ↑ ↓ F G · 빈 곳 클릭이나 Esc = 선택 끝',
+ path:'<b>길·면</b> · 땅을 클릭해 점을 찍어요 · 더블클릭이나 Enter = 끝내기 · Backspace = 마지막 점 지우기 · Esc = 취소 · 그려 둔 길을 클릭하면 골라서 목차 04에서 고쳐요',
  bld:'<b>건물</b> · 왼쪽 목차 \'건물\'에서 종류를 눌러 띄우고, 끌어 옮겨요. R = 90° 돌리기 · Delete = 지우기',
  view:'<b>회전</b> · 드래그 = 회전'};
-const HELP2=' · 휠 = 커서 쪽으로 확대 · 휠 누르고 드래그 = 회전 · Alt+드래그 = 이동 · C = 중앙 정렬';
-function setTool(t){tool=t;document.querySelectorAll('[data-tool]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.tool===t));stage.classList.toggle('view',t==='view');
- $('gsz').style.display=t==='edit'?'':'none';if(t!=='edit')sel.clear();if(t!=='bld'&&bsel>=0){bsel=-1;rebuildBlocks();}hover=null;updateHover();
+const HELP2=' · 휠 = 커서 쪽으로 확대 · 휠 누르고 드래그 = 회전 · Alt+드래그 = 이동 · C = 중앙 정렬 · 더블클릭 = 그 자리에서 사람 시점';
+function setTool(t){const tp={area:'tc-area',edit:'tc-edit',bld:'tc-bld',path:'tc-path'}[t];if(tp&&$(tp)&&t!==tool)$(tp).open=true;tool=t;document.querySelectorAll('[data-tool]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.tool===t));stage.classList.toggle('view',t==='view');
+ $('gsz').style.display=t==='edit'?'':'none';if(t!=='edit')sel.clear();if(t!=='path'){cancelPath();if(psel>=0){psel=-1;rebuildPaths();renderPaths();}}if(t!=='bld'&&bsel>=0){bsel=-1;rebuildBlocks();}hover=null;updateHover();
  uni.uGs.value=t==='edit'?S.g:S.G;updateSel();renderHelp();need=true;sync();}
-function renderHelp(){$('help').innerHTML=Sync.role==='view'?'<b>보기 전용</b> · 드래그 = 회전 · 휠 = 확대':HELP[tool].replace('{b}',el(S.base))+HELP2;}
+function renderHelp(){if(PV.on){$('help').innerHTML='<b>사람 시점</b> · 드래그 = 둘러보기 · W A S D·방향키 = 걷기 (Shift = 빠르게) · Q E = 몸 돌리기 · 휠 = 시야각 · Esc = 나가기 · 물 위에서는 수면 높이에 떠요';return}$('help').innerHTML=Sync.role==='view'?'<b>보기 전용</b> · 드래그 = 회전 · 휠 = 확대':HELP[tool].replace('{b}',el(S.base))+HELP2;}
 document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>setTool(b.dataset.tool));
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{goView(b.dataset.view);sync()});
 document.querySelectorAll('[data-op]').forEach(b=>b.onclick=()=>op(b.dataset.op));
@@ -629,7 +766,7 @@ const tideRange=()=>spring?S.R:S.R*S.neap;
 const waterFromPhase=ph=>S.R/2-(tideRange()/2)*Math.cos(ph*2*PI);
 function setWater(v,fromPlay){W=Math.round(v*100)/100;$('water').value=W;if(document.activeElement!==$('waterNum'))$('waterNum').value=W.toFixed(2);
  if(!fromPlay){const r=tideRange(),c=Math.max(-1,Math.min(1,(S.R/2-W)/(r/2||1)));tPhase=Math.acos(c)/(2*PI);}
- updateWater();renderTideState();if(!$('secp').hidden)renderSection();}
+ updateWater();if(PV.on)updatePcam();renderTideState();if(!$('secp').hidden)renderSection();}
 function renderTrack(){const min=-1,max=S.R+S.storm+1,inp=$('water');inp.min=min;inp.max=max;const tr=$('track');tr.querySelectorAll('.mk').forEach(m=>m.remove());
  const mk=(v,l,c)=>{const s=document.createElement('span');s.className='mk '+(c||'');const f=(v-min)/(max-min);s.style.left=`calc(${f*100}% + ${8-16*f}px)`;s.textContent=l;tr.appendChild(s)};
  mk(0,'간조 0','lw');mk(S.R,'만조 '+el(S.R),'hw');mk(S.R+S.storm,'폭풍 '+el(S.R+S.storm));if(Math.abs(S.base-S.R/2)<0.01)mk(S.base,'시작땅');
@@ -662,12 +799,12 @@ function renderStats(){stCache=null;const st=stats(),isl=st.island||1;
  $('kv1').innerHTML=`<dt>가능 영역</dt><dd>${S.M}×${S.M}칸 · ${fmt((S.M*S.G)**2)}㎡</dd><dt>최고 높이</dt><dd>EL ${el(st.maxH)}</dd><dt>성토량 (해저 ${el(S.seabed)} 위)</dt><dd>${fmt(st.fill)}㎥</dd><dt>높이 한 단</dt><dd>${U().toFixed(2)}m = 1층/${S.div}</dd>`;
  const J=blocks.map(judge);let foot2=0;blocks.forEach(b=>{const[w,d]=dims(b);foot2+=w*d});const cnt={ok:0,mid:0,hi:0,acc:0};J.forEach(j=>cnt[j.c]++);
  $('sB').textContent=blocks.length+'동';
- $('kv3').innerHTML=blocks.length?`<dt>건물 점유 합</dt><dd>${fmt(foot2)}㎡</dd><dt>대지 면적 대비</dt><dd>${st.land?(foot2/st.land*100).toFixed(0)+'%':'대지 없음'}</dd><dt>판정</dt><dd><span class="chip ok">${cnt.ok}</span> <span class="chip mid">${cnt.mid}</span> <span class="chip hi">${cnt.hi}</span>${cnt.acc?` <span class="chip acc">${cnt.acc}</span>`:''}</dd>`:'<dt>아직 놓은 건물이 없어요. 왼쪽 목차 03 건물에서 띄워요.</dt><dd></dd>';
- const lab={};$('blist').innerHTML=blocks.map((b,i)=>{lab[b.t]=(lab[b.t]||0)+1;const j=J[i],t=TK[b.t];return`<button class="bi${i===bsel?' sel':''}" data-i="${i}"><span>${t.name.split(' · ')[0]} ${lab[b.t]}<br><small>바닥 EL ${el(t.raised?j.fl:j.f.mx)} · ${dims(b).join('×')}m</small></span><span class="chip ${j.c}">${j.txt}</span></button>`}).join('');
+ $('kv3').innerHTML=blocks.length?`<dt>건물 점유 합</dt><dd>${fmt(foot2)}㎡</dd><dt>대지 면적 대비</dt><dd>${st.land?(foot2/st.land*100).toFixed(0)+'%':'대지 없음'}</dd><dt>판정</dt><dd><span class="chip"><i style="background:var(--b-ok)"></i>${cnt.ok+cnt.acc}</span> <span class="chip"><i style="background:var(--b-mid)"></i>${cnt.mid}</span> <span class="chip"><i style="background:var(--b-hi)"></i>${cnt.hi}</span></dd>`:'<dt>아직 놓은 건물이 없어요. 왼쪽 목차 03 건물에서 띄워요.</dt><dd></dd>';
+ const lab={};$('blist').innerHTML=blocks.map((b,i)=>{lab[b.t]=(lab[b.t]||0)+1;const j=J[i],t=TK[b.t];return`<button class="bi${i===bsel?' sel':''}" data-i="${i}"><span>${t.name.split(' · ')[0]} ${lab[b.t]}<br><small>바닥 EL ${el(t.raised?j.fl:j.f.mx)} · ${dims(b).join('×')}m</small></span><span class="chip"><i style="background:var(${bcol(j.c)})"></i>${j.txt}</span></button>`}).join('');
  $('blist').querySelectorAll('.bi').forEach(x=>x.onclick=()=>{if(!canEdit())return;bsel=Number(x.dataset.i);if(tool!=='bld')setTool('bld');bsel=Number(x.dataset.i);rebuildBlocks();renderStats();sync();});
- renderTideState();renderBadge();}
-function renderBadge(){$('badge').innerHTML=`수직 ×${S.exag} · 조차 ${S.R.toFixed(1)}m · 한 단 ${U().toFixed(2)}m<br>${S.mode==='step'?'계단':'연속'} · 큰 칸 ${S.G}m · 회전 ${S.theta}° · 비틀기 ${S.skew}°`;}
-function changed(terr){stCache=null;if(terr)updateRefs();updateWater();rebuildBlocks();updateSel();renderStats();if(!$('secp').hidden)renderSection();need=true;sync();}
+ renderPathStats();renderTideState();renderBadge();}
+function renderBadge(){$('badge').innerHTML=`수직 ×${EX()} · 조차 ${S.R.toFixed(1)}m · 한 단 ${U().toFixed(2)}m<br>${S.mode==='step'?'계단':'연속'} · 큰 칸 ${S.G}m · 회전 ${S.theta}° · 비틀기 ${S.skew}°`;}
+function changed(terr){stCache=null;if(terr)updateRefs();updateWater();rebuildBlocks();rebuildPaths();updateSel();renderStats();if(!$('secp').hidden)renderSection();need=true;sync();}
 
 /* ───────── 단면 ───────── */
 let secAxis='x',secPos=0;
@@ -692,7 +829,7 @@ function renderSection(){const svg=$('secSvg'),e=S.exag,n=N,Wv=1200,padL=56,padR
  const hs=S.M*S.G/2;
  svg.innerHTML=`<rect width="${Wv}" height="${Hv}" fill="var(--sheet)"/>${ticks}<rect x="${X(-n/2)}" y="${padT}" width="${(n/2-hs)*sx}" height="${Hv-padT-padB}" fill="var(--grid)" fill-opacity=".5"/><rect x="${X(hs)}" y="${padT}" width="${(n/2-hs)*sx}" height="${Hv-padT-padB}" fill="var(--grid)" fill-opacity=".5"/><path d="${gp}" fill="var(--kan)" fill-opacity=".45" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/><path d="${wp}" fill="var(--water)" fill-opacity=".28"/>${line(0,true,'간조 EL 0','--acc')}${line(S.R,false,'만조 '+el(S.R),'--acc')}${line(S.R+S.storm,true,'폭풍 '+el(S.R+S.storm),'--mute')}<path d="M${padL} ${Y(W)}H${Wv-padR}" stroke="var(--water)" stroke-width="1.6"/><text x="${padL+6}" y="${Y(W)-4}" font-size="11" font-family="IBM Plex Mono,monospace" fill="var(--water)">지금 수위 ${el(W)}</text>${bs}${band}<path d="M${padL} ${Hv-4}h${sx*24}" stroke="var(--ink)" stroke-width="2"/><text x="${padL+sx*24+6}" y="${Hv-1}" font-size="10" font-family="IBM Plex Mono,monospace" fill="var(--mute)">24m</text>`;
  $('secMeta').textContent=`세로 ×${e} 과장 · 회색 띠 = 땅 불가 바다`;$('secPosV').textContent=(secPos>=0?'+':'')+secPos+'m';
- const pts=[];for(let t=0;t<n;t++){const a=-n/2+t,h=prof[t]*e+0.08;if(secAxis==='x')pts.push(a,h,secPos,a+1,h,secPos);else pts.push(secPos,h,a,secPos,h,a+1);}
+ const pts=[];for(let t=0;t<n;t++){const a=-n/2+t,h=prof[t]*EX()+0.08;if(secAxis==='x')pts.push(a,h,secPos,a+1,h,secPos);else pts.push(secPos,h,a,secPos,h,a+1);}
  setLines(secLine,new Float32Array(pts));secLine.visible=true;need=true;}
 function showSec(on){const p=$('secp');p.hidden=!on;$('secBtn').setAttribute('aria-pressed',on);if(on)renderSection();else{secLine.visible=false;need=true;}}
 $('secBtn').onclick=()=>showSec($('secp').hidden);$('secClose').onclick=()=>showSec(false);
@@ -724,22 +861,23 @@ const P=[
  {id:'bld',n:'03',t:'건물',s:'BUILD',items:[{html:'<div class="pal" id="pal"></div><p class="note">종류를 누르면 화면 가운데에 하나 떠요. 위 도구 <b>건물</b>에서 끌어 옮기고 R로 돌려요.</p><div class="btype"><span class="h">종류</span><span class="h">가로</span><span class="h">세로</span><span class="h">층</span><span class="h">목표</span></div><div id="btypes" style="display:grid;gap:4px"></div>'},
   {k:'nkFloors',l:'누각 띄움 높이',u:'층',min:1,max:6,step:1,h:'누각 바닥이 발밑 땅에서 몇 층 위에 뜨는지예요.'},
   {k:'kan',l:'옮길 때 맞출 칸',sel:[['1','1m'],['2','2m (유닛)'],['3','3m (허브)'],['4','4m (누각)'],['12','12m']]},
-  {k:'snapKan',l:'칸에 맞춰 옮기기',chk:1},{k:'statusTint',l:'판정을 지붕 색으로 표시',chk:1}]},
- {id:'tide',n:'04',t:'수위',s:'TIDE',items:[
+  {k:'snapKan',l:'칸에 맞춰 옮기기',chk:1},{k:'statusTint',l:'판정을 건물 색으로 표시',chk:1,h:'연보라 = 대지 위 · 주황 = 조상대·단차 주의 · 먹색 = 만조에 잠김'}]},
+ {id:'path',n:'04',t:'길 · 회랑 · 면',s:'PATH',items:[{html:'<p class="note">위 도구 <b>길·면</b>을 누르고 땅을 클릭해 점을 찍어요. 더블클릭이나 Enter = 끝내기 · Backspace = 마지막 점 지우기 · Esc = 취소. 그려 둔 것을 클릭하면 골라서 아래 값으로 고쳐요.</p><p class="note" id="pCtlLbl" style="border-color:var(--mid)"></p><div class="var"><label for="pKind">종류</label><select id="pKind"><option value="path">길 (폭 있는 선)</option><option value="area">면 (마당·광장)</option></select></div><div class="var"><label for="pW">길 폭</label><div class="num"><input type="number" id="pW" min="0.5" max="30" step="0.5"><span class="u">m</span></div></div><div class="var"><label for="pMode">높이</label><select id="pMode"><option value="ground">지형 따라</option><option value="deck">고정 높이 (회랑·데크)</option></select></div><div class="var"><label for="pEl">고정 높이</label><div class="num"><input type="number" id="pEl" min="-2" max="30" step="0.5"><span class="u">EL</span></div><span class="hint">회랑·데크는 이 높이에 떠 있고 약 4m마다 기둥이 서요. 지형 따라로 두면 길과 면이 땅 위에 그대로 덮여요.</span></div><div class="var"><label for="pSnap">점 맞춤</label><select id="pSnap"><option value="1">1m</option><option value="2">2m</option><option value="3">3m</option><option value="4">4m</option><option value="6">6m</option><option value="12">12m</option></select></div><div class="row" id="pCols" aria-label="색"></div><div class="row"><button id="pDel" class="warn">고른 것 지우기</button><button id="pDesel">고르기 끝</button></div><div class="blist" id="plist"></div>'}]},
+ {id:'tide',n:'05',t:'수위',s:'TIDE',items:[
   {k:'R',l:'조차 (사리)',u:'m',min:1,max:8,step:0.5,h:'간조 EL 0에서 만조까지예요. 완도·진도 사리 4m 안팎, 통영 2.6m.'},
   {k:'neap',l:'조금 비율',u:'×',min:0.2,max:1,step:0.05,h:'조금 날 조차 = 사리 조차 × 이 값.'},
   {k:'storm',l:'폭풍 여유고',u:'m',min:0,max:6,step:0.5,h:'만조 위로 가끔 젖는 높이. 여기까지 조상대, 그 위가 대지.'},
   {k:'walk',l:'걸어 나가는 수위',u:'EL',min:0,max:4,step:0.1,h:'이보다 낮으면 조간대를 걸어 나간다고 봐요. 이쓰쿠시마 1.0m.'},
   {k:'float',l:'떠 보이는 수위',u:'EL',min:0,max:8,step:0.1,h:'이보다 높으면 필로티 건물이 떠 보인다고 봐요. 이쓰쿠시마 2.5m.'},
   {k:'seabed',l:'해저 레벨',u:'EL',min:-6,max:-0.5,step:0.5,h:'영역 밖과 판 곳의 가장 낮은 높이예요.'}]},
- {id:'lvl',n:'05',t:'높이 단위',s:'LEVEL',items:[
+ {id:'lvl',n:'06',t:'높이 단위',s:'LEVEL',items:[
   {k:'floorH',l:'1층 높이',u:'m',min:2.4,max:4.5,step:0.1,h:''},{k:'div',l:'층 분할 수',u:'단',min:1,max:6,step:1,h:''},{k:'maxFloors',l:'최고 높이',u:'층',min:1,max:8,step:1,h:''}]},
- {id:'view',n:'06',t:'보기',s:'VIEW',items:[
+ {id:'view',n:'07',t:'보기',s:'VIEW',items:[
   {k:'exag',l:'수직 과장',u:'×',min:1,max:6,step:0.5,h:'높이만 키워 보여줘요. 수치와 단면 치수는 실제 값이에요.'},
   {k:'colorMode',l:'색',sel:[['zone','조석 존'],['mono','높이 단계 (회색)']]},
   {k:'showGrid',l:'그리드 선 표시',chk:1},{k:'showFoot',l:'편집 중에도 영역 윤곽 표시',chk:1},{k:'showRef',l:'간조·만조 기준선 표시',chk:1}]},
- {id:'cmp',n:'07',t:'버전 비교',s:'COMPARE',items:[{html:'<div style="overflow-x:auto"><table id="cmp"></table></div><p class="note">최근 저장한 버전 4개의 수치를 나란히 봐요.</p>'}]},
- {id:'exp',n:'08',t:'내보내기',s:'EXPORT',items:[{html:'<div class="row"><label class="chk"><input type="checkbox" id="pngLabel" checked> 범례 넣기</label><label class="chk"><input type="checkbox" id="pngClear"> 투명 배경</label></div><div class="row"><button class="pri" id="exPng">PNG 캡처</button><button id="exJson">JSON</button><button id="exCsv">높이맵 CSV</button><button id="exObj">OBJ (zip)</button></div><div id="msg" role="status"></div><p class="note">PNG는 지금 시점 그대로 2배 해상도예요. OBJ는 미터 단위·Y축 위, 원점은 사이트 가운데예요.</p>'}]}];
+ {id:'cmp',n:'08',t:'버전 비교',s:'COMPARE',items:[{html:'<div style="overflow-x:auto"><table id="cmp"></table></div><p class="note">최근 저장한 버전 4개의 수치를 나란히 봐요.</p>'}]},
+ {id:'exp',n:'09',t:'내보내기',s:'EXPORT',items:[{html:'<div class="row"><label class="chk"><input type="checkbox" id="pngLabel" checked> 범례 넣기</label><label class="chk"><input type="checkbox" id="pngClear"> 투명 배경</label></div><div class="row"><button class="pri" id="exPng">PNG 캡처</button><button id="exJson">JSON</button><button id="exCsv">높이맵 CSV</button><button id="exObj">OBJ (zip)</button><button id="exDae">SketchUp용 DAE (zip)</button></div><div class="row" style="margin-top:6px"><select id="recMode" style="width:auto" aria-label="녹화 방식"><option value="tide">조석 한 주기 (24초)</option><option value="orbit">한 바퀴 돌기 (12초)</option><option value="free">직접 조작 (멈출 때까지)</option></select><button class="pri" id="recGo">● 녹화</button><button id="recStop" disabled>■ 멈춤</button></div><div id="msg" role="status"></div><p class="note">PNG는 지금 시점 그대로 2배 해상도예요. OBJ는 라이노용, DAE는 스케치업 「파일 → 가져오기 → COLLADA」용이에요. 단위 m, 원점은 사이트 가운데, 존·건물·길이 재질 색으로 나뉘어 들어가요. 녹화는 3D 화면만 영상(webm)으로 저장돼요. 사람 시점에서도 돼요.</p>'}]}];
 function buildPanels(){$('tocPanels').innerHTML=P.map((p,i)=>`<details class="tc" name="toc" id="tc-${p.id}"${i===0?' open':''}><summary><span class="n">${p.n}</span>${p.t}<span class="s">${p.s}</span></summary><div class="pn" id="pn-${p.id}"></div></details>`).join('');
  for(const p of P){const host=$('pn-'+p.id);for(const it of p.items){const d=document.createElement('div');
   if(it.html){d.innerHTML=it.html;d.style.display='contents';}
@@ -752,8 +890,8 @@ function buildPanels(){$('tocPanels').innerHTML=P.map((p,i)=>`<details class="tc
   const on=(v,commit)=>{if(it.chk)S[it.k]=a.checked;else if(it.sel)S[it.k]=it.k==='kan'?Number(v):v;else{let n=Number(v);if(isNaN(n))return;n=Math.max(it.min,Math.min(it.max,n));S[it.k]=n;}syncVar(it.k);onVar(it.k,it,commit);};
   if(it.chk)a.onchange=()=>on();else if(it.sel)a.onchange=()=>on(a.value);else{a.onchange=()=>on(a.value,true);r.oninput=()=>on(r.value,false);r.onchange=()=>on(r.value,true);}}
  document.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>act(b.dataset.act));
- $('exPng').onclick=exPng;$('exJson').onclick=()=>saveFile(`${fname()}.json`,JSON.stringify({name:$('vname').value,data:serialize()}));$('exCsv').onclick=exCsv;$('exObj').onclick=exObj;
- renderPalette();renderTypes();}
+ $('exPng').onclick=exPng;$('exJson').onclick=()=>saveFile(`${fname()}.json`,JSON.stringify({name:$('vname').value,data:serialize()}));$('exCsv').onclick=exCsv;$('exObj').onclick=exObj;$('exDae').onclick=exDae;$('recGo').onclick=recStart;$('recStop').onclick=recStop;$('recStop2').onclick=recStop;
+ renderPalette();renderTypes();initPathCtl();}
 function syncVar(k){const a=$('v-'+k),r=$('r-'+k);if(!a)return;if(a.type==='checkbox')a.checked=!!S[k];else a.value=S[k];if(r)r.value=S[k];}
 function syncAllVars(){for(const p of P)for(const it of p.items)if(it.k)syncVar(it.k);}
 function dynHints(){const h=(k,t)=>{const e=$('h-'+k);if(e)e.textContent=t};
@@ -774,7 +912,7 @@ function regrid(){if(!canEdit())return;clearHistory();alloc();autoFill();edited=
 function act(a){if(!canEdit())return;pushUndo();
  if(a==='fill'){autoFill();genBase();edited=false;}else if(a==='regen'){genBase();edited=false;}else if(a==='clearFoot'){foot.clear();if(!edited)genBase();}
  touch();updateTerrain();changed(true);markDirty();renderFootNote();}
-function setUniforms(){uni.uExag.value=S.exag;uni.uR.value=S.R;uni.uS.value=S.storm;uni.uU.value=U();uni.uG.value=S.G;uni.uGs.value=tool==='edit'?S.g:S.G;uni.uShowGrid.value=S.showGrid?1:0;uni.uMono.value=S.colorMode==='mono'?1:0;uni.uLo.value=S.seabed;uni.uHi.value=ceilEL();uni.uInv.value.set(Ai[0],Ai[1],Ai[2],Ai[3]);uni.uHalf.value=half;uni.uSiteH.value=S.M*S.G/2;need=true;}
+function setUniforms(){uni.uExag.value=EX();uni.uR.value=S.R;uni.uS.value=S.storm;uni.uU.value=U();uni.uG.value=S.G;uni.uGs.value=tool==='edit'?S.g:S.G;uni.uShowGrid.value=S.showGrid?1:0;uni.uMono.value=S.colorMode==='mono'?1:0;uni.uLo.value=S.seabed;uni.uHi.value=ceilEL();uni.uInv.value.set(Ai[0],Ai[1],Ai[2],Ai[3]);uni.uHalf.value=half;uni.uSiteH.value=S.M*S.G/2;need=true;}
 function renderPalette(){const e=$('pal');if(!e)return;e.innerHTML=TYPES.map(t=>{const c=blocks.filter(b=>b.t===t.k).length;return`<button data-add="${t.k}"><span><b>${t.name}</b><br><small>${t.W}×${t.D}m · ${t.F}층${t.raised?' · 띄움':''}</small></span><small>${c} / ${t.n}</small></button>`}).join('');
  e.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addBlock(b.dataset.add));}
 function renderTypes(){const e=$('btypes');if(!e)return;e.innerHTML=TYPES.map(t=>`<div class="btype"><span>${t.name.split(' · ')[0]}</span>${['W','D','F','n'].map(k=>`<input aria-label="${t.name} ${k}" data-k="${k}" data-t="${t.k}" type="number" min="${k==='n'?0:k==='F'?1:2}" max="${k==='F'?6:120}" step="1" value="${t[k]}">`).join('')}</div>`).join('');
@@ -785,21 +923,21 @@ function b64(u8){let s='';for(let i=0;i<u8.length;i+=8192)s+=String.fromCharCode
 function unb64(s){const r=atob(s),u8=new Uint8Array(r.length);for(let i=0;i<r.length;i++)u8[i]=r.charCodeAt(i);return u8;}
 function packH(){const a=new Int16Array(N*N);for(let k=0;k<N*N;k++)a[k]=Math.round(H[k]*100);return b64(new Uint8Array(a.buffer));}
 function unpackH(s,n){const a=new Int16Array(unb64(s).buffer),h=new Float32Array(n*n);for(let k=0;k<n*n;k++)h[k]=a[k]/100;return h;}
-function serialize(){return{v:2,S:{...S},types:TYPES.map(t=>({k:t.k,W:t.W,D:t.D,F:t.F,n:t.n})),foot:[...foot],blocks:blocks.map(b=>({...b})),N,H:packH(),edited,W,spring};}
-function summary(){const st=stats(),isl=st.island||1;return{island:st.island,intr:st.intr/isl*100,sup:st.sup/isl*100,land:st.land/isl*100,fill:st.fill,maxH:st.maxH,R:S.R,fa:st.fa,nb:blocks.length};}
+function serialize(){return{v:2,S:{...S},types:TYPES.map(t=>({k:t.k,W:t.W,D:t.D,F:t.F,n:t.n})),foot:[...foot],blocks:blocks.map(b=>({...b})),paths:JSON.parse(JSON.stringify(paths)),N,H:packH(),edited,W,spring};}
+function summary(){const st=stats(),isl=st.island||1;return{island:st.island,intr:st.intr/isl*100,sup:st.sup/isl*100,land:st.land/isl*100,fill:st.fill,maxH:st.maxH,R:S.R,fa:st.fa,nb:blocks.length,np:paths.length};}
 function load(o){S={...DEF,...(o.S||{})};alloc();if(o.N===N&&o.H)H=unpackH(o.H,N);
  TYPES=TYPES0.map(t=>({...t,...((o.types||[]).find(x=>x.k===t.k)||{})}));reTK();
- foot=new Set(o.foot||[]);blocks=(o.blocks||[]).filter(b=>TK[b.t]);edited=!!o.edited;bsel=-1;sel.clear();clearHistory();
+ foot=new Set(o.foot||[]);blocks=(o.blocks||[]).filter(b=>TK[b.t]);paths=o.paths||[];psel=-1;drawing=null;pcur=null;edited=!!o.edited;bsel=-1;sel.clear();clearHistory();
  if(o.W!=null)W=o.W;spring=o.spring!==false;
  if(!o.H){autoFill();genBase();}
- clampAll();refreshD();syncAllVars();dynHints();setUniforms();rebuildTerrain();secRange();renderTrack();{const w0=W;setSpring(spring);W=w0;}renderPalette();renderTypes();
+ clampAll();refreshD();syncAllVars();dynHints();setUniforms();rebuildTerrain();secRange();renderTrack();{const w0=W;setSpring(spring);W=w0;}renderPalette();renderTypes();syncPathCtl();renderPaths();
  $('modeStep').setAttribute('aria-pressed',S.mode==='step');$('modeCont').setAttribute('aria-pressed',S.mode==='cont');
  $('gsz').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',Number(b.dataset.g)===S.g));
  renderFootNote();setWater(W);touch(true);changed(true);}
 function markDirty(){if(Sync.role==='view')return;dirty=true;renderSaveState();}
 function renderSaveState(){const e=$('svst');if(Sync.role==='view'){e.textContent='보기 전용';e.className='svst';return}
  e.textContent=dirty?(docInfo.saved?'저장 안 된 변경 있음':'아직 저장 안 됨'):'저장됨 '+new Date(docInfo.updated||Date.now()).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});e.className='svst'+(dirty?' dirty':'');}
-function thumb(){const hide=[selLine,selFill,hovLine],vis=hide.map(o=>o.visible);hide.forEach(o=>o.visible=false);renderer.render(scene,cam);
+function thumb(){const hide=[selLine,selFill,hovLine,prevLine],vis=hide.map(o=>o.visible);hide.forEach(o=>o.visible=false);renderer.render(scene,AC());
  const c=document.createElement('canvas');c.width=360;c.height=240;const x=c.getContext('2d');const sw=cv.width,sh=cv.height,r=Math.min(sw/360,sh/240);
  x.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--sheet').trim();x.fillRect(0,0,360,240);x.drawImage(cv,(sw-360*r)/2,(sh-240*r)/2,360*r,240*r,0,0,360,240);
  hide.forEach((o,i)=>o.visible=vis[i]);need=true;try{return c.toDataURL('image/jpeg',0.82)}catch(e){return''}}
@@ -875,16 +1013,17 @@ async function exObj(){if(!window.JSZip){say('압축 도구를 불러오지 못�
  blocks.forEach((b,n)=>{const J=judge(b),t=TK[b.t],[w,d]=dims(b),[bx,bz]=bWorld(b),y0=t.raised?J.fl:J.f.mx,y1=y0+t.F*S.floorH;out.push(`o ${t.k}_${n+1}`);
   const cs=[[-w/2,-d/2],[w/2,-d/2],[w/2,d/2],[-w/2,d/2]].map(([lx,lz])=>[bx+co*lx-si*lz,bz+si*lx+co*lz]);[y0,y1].forEach(y=>cs.forEach(c=>out.push(fv([c[0],y,c[1]]))));
   [[1,4,3,2],[5,6,7,8],[1,2,6,5],[2,3,7,6],[3,4,8,7],[4,1,5,8]].forEach(q=>out.push('f '+q.map(x=>x+bvi-1).join(' ')));bvi+=8;});
+ paths.forEach((p,n)=>{const g=pathGeo(p,1);if(!g.tri.length)return;out.push(`o path_${n+1}`);for(let a=0;a<g.tri.length;a+=9){for(let b=0;b<9;b+=3)out.push(fv([g.tri[a+b],g.tri[a+b+1],g.tri[a+b+2]]));out.push(`f ${bvi} ${bvi+1} ${bvi+2}`);bvi+=3;}});
  const zip=new JSZip();zip.file('terrain_blocks.obj',out.join('\n'));zip.file('README.txt',`조수간만 대지레벨 OBJ\n단위 m, Y축 위, 원점 사이트 가운데, 간조 EL 0\n조차 ${S.R}m · 그리드 ${S.G}m 회전 ${S.theta}° 비틀기 ${S.skew}°\n`);
  saveFile(`대지레벨_OBJ_${fname()}.zip`,await zip.generateAsync({type:'blob'}));}
 function exPng(){const{w,h}=fitSize(),sc=2,W2=Math.round(w*sc),H2=Math.round(h*sc),pr=renderer.getPixelRatio();
- const hide=[selLine,selFill,hovLine];const vis=hide.map(o=>o.visible);hide.forEach(o=>o.visible=false);
+ const hide=[selLine,selFill,hovLine,prevLine];const vis=hide.map(o=>o.visible);hide.forEach(o=>o.visible=false);
  renderer.setPixelRatio(1);renderer.setSize(W2,H2,false);const clear=$('pngClear').checked;if(clear){scene.background=null;renderer.setClearColor(0,0);}else scene.background=C.sheet.clone();
- renderer.render(scene,cam);const c2=document.createElement('canvas');c2.width=W2;c2.height=H2;const x=c2.getContext('2d');x.drawImage(cv,0,0);
- hide.forEach((o,i)=>o.visible=vis[i]);renderer.setPixelRatio(pr);scene.background=C.sheet.clone();resize();renderer.render(scene,cam);
+ renderer.render(scene,AC());const c2=document.createElement('canvas');c2.width=W2;c2.height=H2;const x=c2.getContext('2d');x.drawImage(cv,0,0);
+ hide.forEach((o,i)=>o.visible=vis[i]);renderer.setPixelRatio(pr);scene.background=C.sheet.clone();resize();renderer.render(scene,AC());
  if($('pngLabel').checked){const st=stats(),isl=st.island||1,cs=getComputedStyle(document.documentElement),tok=n=>cs.getPropertyValue(n).trim(),pad=28;x.textBaseline='top';
   x.fillStyle=tok('--ink');x.font=`700 22px "IBM Plex Sans KR",sans-serif`;x.fillText($('vname').value||'대지레벨',pad,pad);
-  x.font=`500 12px "IBM Plex Mono",monospace`;x.fillStyle=tok('--mute');x.fillText(`조차 ${S.R.toFixed(1)}m · 수위 EL ${el(W)} · 수직 ×${S.exag} · 한 단 ${U().toFixed(2)}m · 그리드 ${S.G}m`,pad,pad+32);
+  x.font=`500 12px "IBM Plex Mono",monospace`;x.fillStyle=tok('--mute');x.fillText(`조차 ${S.R.toFixed(1)}m · 수위 EL ${el(W)} · 수직 ×${EX()} · 한 단 ${U().toFixed(2)}m · 그리드 ${S.G}m`,pad,pad+32);
   const Z=[['조간대',st.intr,'--z-int'],['조상대',st.sup,'--z-sup'],['대지',st.land,'--z-land'],['조하대 (판 곳)',st.sub,'--z-sub']];let yy=H2-pad-Z.length*20-24;
   x.fillStyle=tok('--ink');x.font=`600 13px "IBM Plex Sans KR",sans-serif`;x.fillText(`섬 면적 ${fmt(st.island)}㎡ (EL 0 위)`,pad,yy);yy+=24;
   Z.forEach(z=>{x.fillStyle=tok(z[2]);x.fillRect(pad,yy+2,14,10);x.strokeStyle=tok('--kan');x.strokeRect(pad,yy+2,14,10);x.fillStyle=tok('--ink');x.font=`500 12px "IBM Plex Mono",monospace`;x.fillText(`${z[0]}  ${fmt(z[1])}㎡${z[0].startsWith('조하')?'':'  '+(z[1]/isl*100).toFixed(1)+'%'}`,pad+22,yy);yy+=20;});
@@ -913,7 +1052,7 @@ const Sync={role:'solo',peer:null,conns:[],room:'',follow:true,retry:0,gen:0,sta
  leave(quiet){this.gen++;clearTimeout(this.retry);if(this.peer){try{this.peer.destroy()}catch(e){}}this.peer=null;this.conns=[];const was=this.role;this.role='solo';this.status='';uiSync();renderHelp();renderSaveState();if(!quiet&&was==='view')setTool('edit');},
  send(m){if(this.role!=='ctrl')return;for(const c of this.conns)if(c.open)try{c.send(m)}catch(e){}},
  full(){return{doc:serialize(),name:$('vname').value,lite:lite()}}};
-function lite(){return{S:{...S},foot:[...foot],blocks,types:TYPES.map(t=>({k:t.k,W:t.W,D:t.D,F:t.F,n:t.n})),W,spring,tPhase,sel:[...sel],tool,bsel,cam:{...V},name:$('vname').value,edited};}
+function lite(){return{S:{...S},foot:[...foot],blocks,types:TYPES.map(t=>({k:t.k,W:t.W,D:t.D,F:t.F,n:t.n})),W,spring,tPhase,sel:[...sel],tool,bsel,cam:{...V},name:$('vname').value,edited,paths,psel,PV:{on:PV.on,x:PV.x,z:PV.z,h:PV.h,p:PV.p,fov:PV.fov,eye:PV.eye}};}
 let syncT=0,syncPend=false;
 function sync(){if(Sync.role!=='ctrl'||!Sync.conns.length){dirtyBox=null;return}if(syncPend)return;syncPend=true;setTimeout(flushSync,Math.max(0,90-(performance.now()-syncT)));}
 function flushSync(){syncPend=false;syncT=performance.now();if(Sync.role!=='ctrl')return;
@@ -924,11 +1063,12 @@ function flushSync(){syncPend=false;syncT=performance.now();if(Sync.role!=='ctrl
 function applyLite(L){if(L.S.M!==S.M||L.S.B!==S.B||L.S.G!==S.G)return;const modeCh=L.S.mode!==S.mode,tfCh=L.S.theta!==S.theta||L.S.skew!==S.skew;
  S={...L.S};if(tfCh)setTransform();foot=new Set(L.foot);blocks=L.blocks;TYPES=TYPES0.map(t=>({...t,...(L.types.find(x=>x.k===t.k)||{})}));reTK();edited=L.edited;
  sel=new Set(L.sel);bsel=L.bsel;tool=L.tool;spring=L.spring;tPhase=L.tPhase;
- if(L.name)$('vname').value=L.name;if(Sync.follow&&L.cam){Object.assign(V,L.cam);updateCam();}
+ if(L.name)$('vname').value=L.name;paths=L.paths||[];psel=L.psel==null?-1:L.psel;if(Sync.follow&&L.cam){Object.assign(V,L.cam);updateCam();}
+ if(Sync.follow&&L.PV){const was=PV.on;Object.assign(PV,L.PV);syncPv();if(was!==PV.on)applyEx();else if(PV.on)updatePcam();}
  setUniforms();refreshD();if(modeCh)rebuildTerrain();else updateTerrain();syncAllVars();dynHints();renderTrack();
  $('spring').setAttribute('aria-pressed',spring);$('neap').setAttribute('aria-pressed',!spring);W=L.W;$('water').value=W;$('waterNum').value=W.toFixed(2);
  $('modeStep').setAttribute('aria-pressed',S.mode==='step');$('modeCont').setAttribute('aria-pressed',S.mode==='cont');
- changed(true);renderPalette();$('ops').hidden=true;}
+ changed(true);renderPalette();renderPaths();$('ops').hidden=true;}
 function applyRemote(m){if(!m||Sync.role!=='view')return;
  if(m.t==='full'){const d=m.d;load(d.doc);if(d.name)$('vname').value=d.name;if(d.lite)applyLite(d.lite);dirty=false;renderSaveState();}
  else if(m.t==='h'){if(m.N!==N)return;const a=new Int16Array(unb64(m.d).buffer);for(let i=0;i<m.h;i++)for(let j=0;j<m.w;j++)H[(m.i0+i)*N+m.j0+j]=a[i*m.w+j]/100;refreshD();updateTerrain();stCache=null;}
@@ -949,18 +1089,22 @@ function uiSync(){const s=$('syncS'),bar=$('syncbar'),pn=$('syncPn');const r=Syn
 /* ───────── 테마 ───────── */
 function applyTheme(){readTokens();uni.cSub.value.copy(C['z-sub']);uni.cInt.value.copy(C['z-int']);uni.cSup.value.copy(C['z-sup']);uni.cLand.value.copy(C['z-land']);uni.cInk.value.copy(C.ink);uni.cMass.value.copy(C.mass);uni.cMassLo.value.copy(C.kan);
  scene.background=C.sheet.clone();waterMat.color.copy(C.water);shore.material.color.copy(C.water).lerp(C.ink,0.35);refMat.color.copy(C.acc);refHi.material.color.copy(C.acc);secLine.material.color.copy(C.acc);
- edgeMat.color.copy(C.ink);edgeSel.color.copy(C.acc);selFillMat.color.copy(C.acc);selLineMat.color.copy(C.acc);footLineMat.color.copy(C.ink);hovMat.color.copy(C.acc);siteLine.material.color.copy(C.ink);
- if(N)rebuildBlocks();renderLegend();need=true;}
+ edgeMat.color.copy(C.ink);edgeSel.color.copy(C.acc);selFillMat.color.copy(C.acc);selLineMat.color.copy(C.acc);footLineMat.color.copy(C.ink);hovMat.color.copy(C.acc);siteLine.material.color.copy(C.ink);postMat.color.copy(C.ink);prevLine.material.color.copy(C.acc);
+ if(N){rebuildBlocks();rebuildPaths();}renderLegend();need=true;}
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme);
 new MutationObserver(applyTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
-function renderLegend(){$('legend').innerHTML=`<span><i style="background:var(--z-sub)"></i>조하대<em>늘 잠김</em></span><span><i style="background:var(--z-int)"></i>조간대<em>하루 두 번</em></span><span><i style="background:var(--z-sup)"></i>조상대<em>가끔 젖음</em></span><span><i style="background:var(--z-land)"></i>대지</span><span><i style="background:var(--water);opacity:.5"></i>수면</span><span><i style="border:0;border-top:1.5px dashed var(--ink);height:0"></i>영역</span><span><i style="border:1.5px solid var(--acc);background:color-mix(in srgb,var(--acc) 18%,transparent)"></i>선택</span><span><i style="background:repeating-linear-gradient(45deg,var(--z-sub) 0 3px,var(--kan) 3px 4px)"></i>땅 불가</span>`;}
+function renderLegend(){$('legend').innerHTML=`<span><i style="background:var(--z-sub)"></i>조하대<em>늘 잠김</em></span><span><i style="background:var(--z-int)"></i>조간대<em>하루 두 번</em></span><span><i style="background:var(--z-sup)"></i>조상대<em>해일 때 젖음</em></span><span><i style="background:var(--z-land)"></i>대지<em>해일 위</em></span><span><i style="background:var(--b-ok)"></i>건물<em>가능</em></span><span><i style="background:var(--b-mid)"></i>주의</span><span><i style="background:var(--b-hi)"></i>잠김</span><span><i style="background:var(--water);opacity:.5"></i>수면</span><span><i style="border:0;border-top:1.5px dashed var(--ink);height:0"></i>영역</span><span><i style="border:1.5px solid var(--acc);background:color-mix(in srgb,var(--acc) 18%,transparent)"></i>선택</span><span><i style="background:repeating-linear-gradient(45deg,var(--z-sub) 0 3px,var(--kan) 3px 4px)"></i>땅 불가</span>`;}
 
 /* ───────── 루프·시작 ───────── */
 let need=true;
 function frame(now){requestAnimationFrame(frame);if($('editor').hidden)return;
  if(animV){const t=Math.min(1,(now-animV.t0)/320),k=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;V.yaw=animV.y0+(animV.y1-animV.y0)*k;V.pitch=animV.p0+(animV.p1-animV.p0)*k;updateCam();if(t>=1){animV=null;sync();}}
+ if(PV.on&&keys.size){const dt=Math.min(0.25,(now-(PV.lt||now))/1000),sp=PV.speed*(keys.has('shift')?4:1)*dt;let f=0,r=0;if(keys.has('w')||keys.has('arrowup'))f+=1;if(keys.has('s')||keys.has('arrowdown'))f-=1;if(keys.has('d'))r+=1;if(keys.has('a'))r-=1;
+  if(keys.has('arrowleft')||keys.has('q'))PV.h+=1.2*dt;if(keys.has('arrowright')||keys.has('e'))PV.h-=1.2*dt;const sh=Math.sin(PV.h),ch=Math.cos(PV.h);PV.x+=(-sh*f+ch*r)*sp;PV.z+=(-ch*f-sh*r)*sp;const hn=N/2-1;PV.x=Math.max(-hn,Math.min(hn,PV.x));PV.z=Math.max(-hn,Math.min(hn,PV.z));updatePcam();if(Sync.role==='ctrl'&&now-syncT>150)sync();}
+ PV.lt=now;
+ if(Rec.mr){const t=now-Rec.t0;$('recT').textContent=`${Math.floor(t/60000)}:${String(Math.floor(t/1000)%60).padStart(2,'0')}`;if(Rec.mode==='orbit'){const a=Rec.y0+2*PI*Math.min(1,t/Rec.dur);if(PV.on){PV.h=a;updatePcam();}else{V.yaw=a;updateCam();}}need=true;if(Rec.dur&&t>=Rec.dur+100)recStop();}
  if(playing){const dt=(now-lastT)/1000;lastT=now;tPhase=(tPhase+dt/PERIOD)%1;setWater(waterFromPhase(tPhase),true);if(Sync.role==='ctrl'&&now-syncT>300)sync();}
- if(need){need=false;renderer.render(scene,cam);}}
+ if(need){need=false;renderer.render(scene,AC());}}
 applyTheme();buildPanels();
 S={...DEF};alloc();autoFill();genBase();setUniforms();rebuildTerrain();secRange();renderTrack();
 document.querySelectorAll('[data-tool]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.tool===tool));
@@ -968,7 +1112,7 @@ $('gsz').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',Num
 uiSync();updUR();renderHelp();requestAnimationFrame(frame);route();
 window.__T={get S(){return S},stats:()=>{stCache=null;return stats()},blocks:()=>blocks.map(b=>({t:b.t,...judge(b)})),goView,setWater,setMode,newDoc,op,setG,setTool,addBlock,
  get sel(){return sel},get foot(){return foot},selectCells:(f)=>{sel=new Set(f(K));updateSel();},get N(){return N},get D(){return D},serialize,saveDoc,K,cellOf,get inSite(){return inSite},
- setS:(o)=>{Object.assign(S,o);setTransform();setUniforms();if(!edited)genBase();touch();refreshD();updateTerrain();changed(true)},route,Sync,get dirty(){return dirty},get edited(){return edited}};
+ setS:(o)=>{Object.assign(S,o);setTransform();setUniforms();if(!edited)genBase();touch();refreshD();updateTerrain();changed(true)},route,Sync,get dirty(){return dirty},get edited(){return edited},get paths(){return paths},enterPV,exitPV,PV,daeXmlNow:()=>{const o=daeObjects();return daeXml(o.objs,o.mats)},finishPath,get drawing(){return drawing}};
 })();
 </script>
 
