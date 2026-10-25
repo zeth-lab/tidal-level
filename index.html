@@ -239,7 +239,7 @@ th{color:var(--mute);font-size:11px;font-weight:500}
       <div class="badge" id="badge"></div>
       <canvas id="cv" aria-label="3D 지형 뷰"></canvas>
       <div class="secp" id="secp" hidden>
-        <div class="hd"><b>단면</b><button id="secX" aria-pressed="true">동서</button><button id="secZ">남북</button><label class="row" style="gap:6px">위치 <input type="range" id="secPos" style="width:160px;accent-color:var(--acc)"> <span id="secPosV" class="mono" style="min-width:48px"></span></label><span class="muted mono" id="secMeta" style="font-size:11px"></span></div>
+        <div class="hd"><b>단면</b><button id="secX" aria-pressed="true">동서</button><button id="secZ">남북</button><label class="row" style="gap:6px">위치 <input type="range" id="secPos" style="width:160px;accent-color:var(--acc)"> <span id="secPosV" class="mono" style="min-width:48px"></span></label><span class="muted mono" id="secMeta" style="font-size:11px"></span><button id="secClose" aria-label="단면 닫기" title="Esc" style="margin-left:auto">✕ 닫기</button></div>
         <svg id="secSvg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="단면도"></svg>
       </div>
       <div class="tide" id="tidebar">
@@ -583,6 +583,7 @@ addEventListener('keydown',ev=>{if($('editor').hidden)return;
  if(ev.code==='Space'){spaceDown=true;stage.classList.add('view');ev.preventDefault();return}
  if(!canEdit())return;
  const n=Number(ev.key);if(n>=1&&n<=6&&!ev.ctrlKey&&!ev.metaKey&&!ev.altKey){setG(GS[n-1]);return}
+ if(ev.key==='Escape'&&!$('secp').hidden&&!sel.size&&bsel<0){showSec(false);return}
  if(ev.key==='Escape'){sel.clear();bsel=-1;updateSel();rebuildBlocks();renderStats();sync();return}
  if(tool==='edit'&&sel.size){if(ev.key==='ArrowUp'){ev.preventDefault();op('up')}else if(ev.key==='ArrowDown'){ev.preventDefault();op('down')}else if(ev.key==='f'||ev.key==='F')op('flat');else if(ev.key==='g'||ev.key==='G')op('smooth');}
  if(bsel>=0&&(ev.key==='r'||ev.key==='R')){pushUndo();const b=blocks[bsel];b.rot^=1;snapB(b);rebuildBlocks();changed(false);markDirty();}
@@ -679,7 +680,8 @@ function renderSection(){const svg=$('secSvg'),e=S.exag,n=N,Wv=1200,padL=56,padR
  $('secMeta').textContent=`세로 ×${e} 과장 · 회색 띠 = 땅 불가 바다`;$('secPosV').textContent=(secPos>=0?'+':'')+secPos+'m';
  const pts=[];for(let t=0;t<n;t++){const a=-n/2+t,h=prof[t]*e+0.08;if(secAxis==='x')pts.push(a,h,secPos,a+1,h,secPos);else pts.push(secPos,h,a,secPos,h,a+1);}
  setLines(secLine,new Float32Array(pts));secLine.visible=true;need=true;}
-$('secBtn').onclick=()=>{const p=$('secp');p.hidden=!p.hidden;$('secBtn').setAttribute('aria-pressed',!p.hidden);if(!p.hidden)renderSection();else{secLine.visible=false;need=true;}};
+function showSec(on){const p=$('secp');p.hidden=!on;$('secBtn').setAttribute('aria-pressed',on);if(on)renderSection();else{secLine.visible=false;need=true;}}
+$('secBtn').onclick=()=>showSec($('secp').hidden);$('secClose').onclick=()=>showSec(false);
 $('secX').onclick=()=>{secAxis='x';$('secX').setAttribute('aria-pressed','true');$('secZ').setAttribute('aria-pressed','false');renderSection()};
 $('secZ').onclick=()=>{secAxis='z';$('secZ').setAttribute('aria-pressed','true');$('secX').setAttribute('aria-pressed','false');renderSection()};
 $('secPos').addEventListener('input',e=>{secPos=Number(e.target.value);renderSection()});
