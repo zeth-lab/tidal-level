@@ -231,7 +231,7 @@ th{color:var(--mute);font-size:11px;font-weight:500}
         <button data-op="up" title="↑">▲ 올리기</button><button data-op="down" title="↓">▼ 내리기</button><button data-op="flat" title="F">평탄</button><button data-op="smooth" title="G">다듬기</button><button data-op="clear" title="Esc">선택 끝</button>
       </div>
       <div class="ov views" role="toolbar" aria-label="시점">
-        <button data-view="se">아이소 SE</button><button data-view="sw">SW</button><button data-view="nw">NW</button><button data-view="ne">NE</button><button data-view="top">평면</button><button data-view="elev">입면</button><button id="secBtn">단면</button><button id="zin" aria-label="확대">＋</button><button id="zout" aria-label="축소">－</button>
+        <button id="centerBtn" title="섬을 화면 가운데에 맞춰요 (C)">⊙ 중앙 정렬</button><button data-view="se">아이소 SE</button><button data-view="sw">SW</button><button data-view="nw">NW</button><button data-view="ne">NE</button><button data-view="top">평면</button><button data-view="elev">입면</button><button id="secBtn">단면</button><button id="zin" aria-label="확대">＋</button><button id="zout" aria-label="축소">－</button>
       </div>
       <div class="syncbar" id="syncbar" hidden></div>
       <svg class="compass" id="compass" viewBox="-20 -20 40 40" aria-hidden="true"><circle r="17" fill="none" stroke="var(--kan)"/><g id="cmpG"><path d="M0 -14 L4 2 L0 -1 L-4 2Z" fill="var(--ink)"/><text x="0" y="-19.5" text-anchor="middle" font-size="7.5" font-family="IBM Plex Mono,monospace" fill="var(--mute)">N</text></g></svg>
@@ -513,6 +513,13 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function goView(k){const[y,p]=VIEWS[k];let dy=y-V.yaw;dy=Math.atan2(Math.sin(dy),Math.cos(dy));if(Sync.role==='view')Sync.follow=false;
  if(reduce){V.yaw+=dy;V.pitch=p;updateCam();}else animV={y0:V.yaw,y1:V.yaw+dy,p0:V.pitch,p1:p,t0:performance.now()};
  curView=k;document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===k));}
+function centerView(){let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9,h0=1e9,h1=-1e9,n=0;
+ for(let i=0;i<N;i++)for(let j=0;j<N;j++){const k=i*N+j;if(!inSite[k]||D[k]<-1e-6)continue;const x=cx(j),z=cz(i);if(x<x0)x0=x;if(x>x1)x1=x;if(z<z0)z0=z;if(z>z1)z1=z;const h=D[k];if(h<h0)h0=h;if(h>h1)h1=h;n++;}
+ blocks.forEach(b=>{const[bx,bz]=bWorld(b),[w,d]=dims(b),r=Math.hypot(w,d)/2;x0=Math.min(x0,bx-r);x1=Math.max(x1,bx+r);z0=Math.min(z0,bz-r);z1=Math.max(z1,bz+r);n++;});
+ if(!n){const hs=S.M*S.G/2;x0=z0=-hs;x1=z1=hs;h0=0;h1=0;}
+ const{w,h}=fitSize(),asp=w/h,r=Math.hypot(x1-x0,z1-z0)/2+6,need=Math.max(r,r/asp)*(V.pitch>1.5?0.78:0.9);
+ V.tx=(x0+x1)/2;V.tz=(z0+z1)/2;V.ty=((h0+h1)/2)*S.exag;V.zoom=Math.max(0.35,Math.min(16,N*0.6/need));
+ if(Sync.role==='view'&&Sync.follow){Sync.follow=false;uiSync();}updateCam();sync();}
 function camAxes(){const r=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0),u=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,1);return[r,u];}
 function zoomAt(f,ev){const w0=cam.right,h0=cam.top;V.zoom=Math.max(0.35,Math.min(16,V.zoom*f));
  if(ev){const r=cv.getBoundingClientRect(),nx=((ev.clientX-r.left)/r.width)*2-1,ny=-((ev.clientY-r.top)/r.height)*2+1;const{w,h}=fitSize(),asp=w/h,sp=spanFor(V.zoom);
@@ -579,7 +586,7 @@ function endDrag(){if(!drag)return;const k=drag.k,mv=drag.moved;drag=null;if(k==
 cv.addEventListener('pointerup',endDrag);cv.addEventListener('pointercancel',endDrag);
 cv.addEventListener('pointerleave',()=>{if(hover){hover=null;updateHover()}});
 cv.addEventListener('wheel',ev=>{ev.preventDefault();if(Sync.role==='view'&&Sync.follow){Sync.follow=false;uiSync();}zoomAt(Math.exp(-ev.deltaY*0.0012),ev);sync();},{passive:false});
-$('zin').onclick=()=>{zoomAt(1.25);sync()};$('zout').onclick=()=>{zoomAt(1/1.25);sync()};
+$('centerBtn').onclick=centerView;$('zin').onclick=()=>{zoomAt(1.25);sync()};$('zout').onclick=()=>{zoomAt(1/1.25);sync()};
 function afterFoot(){if(!edited){genBase();touch();updateTerrain();updateRefs();updateWater();}updateSel();renderStats();renderFootNote();sync();}
 addEventListener('keydown',ev=>{if($('editor').hidden)return;
  if((ev.ctrlKey||ev.metaKey)&&ev.key.toLowerCase()==='s'){ev.preventDefault();saveDoc(false);return}
@@ -587,6 +594,7 @@ addEventListener('keydown',ev=>{if($('editor').hidden)return;
  if((ev.ctrlKey||ev.metaKey)&&(ev.key.toLowerCase()==='y'||(ev.key.toLowerCase()==='z'&&ev.shiftKey))){ev.preventDefault();redo();return}
  if((ev.ctrlKey||ev.metaKey)&&ev.key.toLowerCase()==='z'){ev.preventDefault();undo();return}
  if(ev.code==='Space'){spaceDown=true;stage.classList.add('view');ev.preventDefault();return}
+ if(ev.key==='c'||ev.key==='C'){centerView();return}
  if(!canEdit())return;
  const n=Number(ev.key);if(n>=1&&n<=6&&!ev.ctrlKey&&!ev.metaKey&&!ev.altKey){setG(GS[n-1]);return}
  if(ev.key==='Escape'&&!$('secp').hidden&&!sel.size&&bsel<0){showSec(false);return}
@@ -601,7 +609,7 @@ const HELP={area:'<b>영역</b> · 12m 칸을 클릭하면 시작 높이(EL {b})
  edit:'<b>편집</b> · 칸을 클릭해 고르고 ▲ ▼ 로 한 단씩 올리고 내려요. Shift+클릭 = 더하기 · 끌기 = 여러 칸 · 숫자 1–6 = 칸 크기 · ↑ ↓ F G · 빈 곳 클릭이나 Esc = 선택 끝',
  bld:'<b>건물</b> · 왼쪽 목차 \'건물\'에서 종류를 눌러 띄우고, 끌어 옮겨요. R = 90° 돌리기 · Delete = 지우기',
  view:'<b>회전</b> · 드래그 = 회전'};
-const HELP2=' · 휠 = 커서 쪽으로 확대 · 휠 누르고 드래그 = 회전 · Alt+드래그 = 이동';
+const HELP2=' · 휠 = 커서 쪽으로 확대 · 휠 누르고 드래그 = 회전 · Alt+드래그 = 이동 · C = 중앙 정렬';
 function setTool(t){tool=t;document.querySelectorAll('[data-tool]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.tool===t));stage.classList.toggle('view',t==='view');
  $('gsz').style.display=t==='edit'?'':'none';if(t!=='edit')sel.clear();if(t!=='bld'&&bsel>=0){bsel=-1;rebuildBlocks();}hover=null;updateHover();
  uni.uGs.value=t==='edit'?S.g:S.G;updateSel();renderHelp();need=true;sync();}
@@ -784,7 +792,7 @@ function load(o){S={...DEF,...(o.S||{})};alloc();if(o.N===N&&o.H)H=unpackH(o.H,N
  foot=new Set(o.foot||[]);blocks=(o.blocks||[]).filter(b=>TK[b.t]);edited=!!o.edited;bsel=-1;sel.clear();clearHistory();
  if(o.W!=null)W=o.W;spring=o.spring!==false;
  if(!o.H){autoFill();genBase();}
- clampAll();refreshD();syncAllVars();dynHints();setUniforms();rebuildTerrain();secRange();renderTrack();setSpring(spring);renderPalette();renderTypes();
+ clampAll();refreshD();syncAllVars();dynHints();setUniforms();rebuildTerrain();secRange();renderTrack();{const w0=W;setSpring(spring);W=w0;}renderPalette();renderTypes();
  $('modeStep').setAttribute('aria-pressed',S.mode==='step');$('modeCont').setAttribute('aria-pressed',S.mode==='cont');
  $('gsz').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',Number(b.dataset.g)===S.g));
  renderFootNote();setWater(W);touch(true);changed(true);}
