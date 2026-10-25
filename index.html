@@ -224,7 +224,7 @@ th{color:var(--mute);font-size:11px;font-weight:500}
         <span class="gsz" id="gsz" aria-label="편집 칸 크기"></span>
         <span class="sep"></span>
         <button id="modeStep" aria-pressed="true" title="1단 높이 계단">계단</button><button id="modeCont" title="매끈한 지형">연속</button>
-        <button id="undoBtn" title="Ctrl+Z">되돌리기</button>
+        <button id="undoBtn" title="Ctrl+Z">↶ 되돌리기</button><button id="redoBtn" title="Ctrl+Shift+Z 또는 Ctrl+Y">↷ 다시 하기</button>
       </div>
       <div class="ov ops" id="ops" hidden>
         <span class="lbl" id="opsLbl"></span>
@@ -345,9 +345,14 @@ function slopeFrom(idx,dir){if(!idx.length)return;const s=1/S.slopeN,s2=s*Math.S
  touch(i0,i1,j0,j1);}
 
 /* 되돌리기 */
-const undoStack=[];
-function pushUndo(){undoStack.push({N,H:H.slice(0),foot:[...foot],blocks:JSON.stringify(blocks),edited});if(undoStack.length>30)undoStack.shift();}
-function undo(){if(!canEdit())return;const u=undoStack.pop();if(!u){toast('되돌릴 작업이 없어요');return}if(u.N!==N)return;H=u.H;foot=new Set(u.foot);blocks=JSON.parse(u.blocks);edited=u.edited;bsel=-1;refreshD();touch();updateTerrain();changed(true);markDirty();renderPalette();renderFootNote();}
+const undoStack=[],redoStack=[];
+function snap(){return{N,H:H.slice(0),foot:[...foot],blocks:JSON.stringify(blocks),edited};}
+function updUR(){const u=$('undoBtn'),r=$('redoBtn');if(!u||!r)return;const v=Sync.role==='view';u.disabled=v||!undoStack.length;r.disabled=v||!redoStack.length;}
+function pushUndo(){undoStack.push(snap());if(undoStack.length>30)undoStack.shift();redoStack.length=0;updUR();}
+function clearHistory(){undoStack.length=0;redoStack.length=0;updUR();}
+function restoreSnap(u){H=u.H;foot=new Set(u.foot);blocks=JSON.parse(u.blocks);edited=u.edited;bsel=-1;refreshD();touch();updateTerrain();changed(true);markDirty();renderPalette();renderFootNote();updUR();}
+function undo(){if(!canEdit())return;const u=undoStack.pop();if(!u){toast('되돌릴 작업이 없어요');return}if(u.N!==N){clearHistory();return}redoStack.push(snap());if(redoStack.length>30)redoStack.shift();restoreSnap(u);}
+function redo(){if(!canEdit())return;const r=redoStack.pop();if(!r){toast('다시 할 작업이 없어요');return}if(r.N!==N){clearHistory();return}undoStack.push(snap());restoreSnap(r);}
 
 /* ───────── 3D ───────── */
 let C={};
@@ -570,7 +575,7 @@ cv.addEventListener('pointermove',ev=>{
  if(!inSite[h.k])return;
  if(drag.k==='area'){const key=cellOf(h.k,S.G);if(key===drag.last)return;drag.last=key;if(drag.add)foot.add(key);else foot.delete(key);afterFoot();return}
  if(drag.k==='sel'){const key=cellOf(h.k,S.g);if(key===drag.last)return;drag.last=key;sel.add(key);updateSel();sync();}});
-function endDrag(){if(!drag)return;const k=drag.k,mv=drag.moved;drag=null;if(k==='block'){if(mv){changed(false);markDirty();}else undoStack.pop();}if(k==='area'){markDirty();changed(true);}}
+function endDrag(){if(!drag)return;const k=drag.k,mv=drag.moved;drag=null;if(k==='block'){if(mv){changed(false);markDirty();}else{undoStack.pop();updUR();}}if(k==='area'){markDirty();changed(true);}}
 cv.addEventListener('pointerup',endDrag);cv.addEventListener('pointercancel',endDrag);
 cv.addEventListener('pointerleave',()=>{if(hover){hover=null;updateHover()}});
 cv.addEventListener('wheel',ev=>{ev.preventDefault();if(Sync.role==='view'&&Sync.follow){Sync.follow=false;uiSync();}zoomAt(Math.exp(-ev.deltaY*0.0012),ev);sync();},{passive:false});
@@ -579,6 +584,7 @@ function afterFoot(){if(!edited){genBase();touch();updateTerrain();updateRefs();
 addEventListener('keydown',ev=>{if($('editor').hidden)return;
  if((ev.ctrlKey||ev.metaKey)&&ev.key.toLowerCase()==='s'){ev.preventDefault();saveDoc(false);return}
  if(ev.target.closest&&ev.target.closest('input,select,textarea'))return;
+ if((ev.ctrlKey||ev.metaKey)&&(ev.key.toLowerCase()==='y'||(ev.key.toLowerCase()==='z'&&ev.shiftKey))){ev.preventDefault();redo();return}
  if((ev.ctrlKey||ev.metaKey)&&ev.key.toLowerCase()==='z'){ev.preventDefault();undo();return}
  if(ev.code==='Space'){spaceDown=true;stage.classList.add('view');ev.preventDefault();return}
  if(!canEdit())return;
@@ -607,7 +613,7 @@ $('gsz').innerHTML=GS.map((g,i)=>`<button data-g="${g}" title="숫자 ${i+1}">${
 $('gsz').querySelectorAll('button').forEach(b=>b.onclick=()=>setG(Number(b.dataset.g)));
 function setG(g){if(S.g!==g){S.g=g;sel.clear();}if(tool!=='edit')setTool('edit');uni.uGs.value=g;$('gsz').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',Number(b.dataset.g)===g));hover=null;updateHover();updateSel();need=true;sync();}
 function setMode(m){if(S.mode===m)return;S.mode=m;$('modeStep').setAttribute('aria-pressed',m==='step');$('modeCont').setAttribute('aria-pressed',m==='cont');refreshD();rebuildTerrain();changed(true);markDirty();}
-$('modeStep').onclick=()=>canEdit()&&setMode('step');$('modeCont').onclick=()=>canEdit()&&setMode('cont');$('undoBtn').onclick=undo;
+$('modeStep').onclick=()=>canEdit()&&setMode('step');$('modeCont').onclick=()=>canEdit()&&setMode('cont');$('undoBtn').onclick=undo;$('redoBtn').onclick=redo;
 
 /* ───────── 수위 ───────── */
 let playing=false,tPhase=0.5,lastT=0;const PERIOD=24;
@@ -756,7 +762,7 @@ function onVar(k,it,commit){dynHints();setUniforms();if(!canEdit())return;
  if(k==='R'||k==='storm'||k==='neap'||k==='walk'||k==='float'){renderTrack();if(k==='R'||k==='storm')setWater(Math.min(W,S.R+S.storm+1));}
  if(k==='kan'||k==='snapKan')blocks.forEach(snapB);
  changed(['R','seabed','floorH','div','exag','maxFloors','storm'].includes(k));markDirty();}
-function regrid(){if(!canEdit())return;undoStack.length=0;alloc();autoFill();edited=false;genBase();sel.clear();blocks=blocks.filter(b=>b.u<S.M*S.G&&b.v<S.M*S.G);rebuildTerrain();secRange();touch(true);changed(true);markDirty();renderFootNote();renderPalette();toast(`가능 영역 ${S.M}×${S.M}칸 · 바다 ${S.B}칸으로 다시 만들었어요`);}
+function regrid(){if(!canEdit())return;clearHistory();alloc();autoFill();edited=false;genBase();sel.clear();blocks=blocks.filter(b=>b.u<S.M*S.G&&b.v<S.M*S.G);rebuildTerrain();secRange();touch(true);changed(true);markDirty();renderFootNote();renderPalette();toast(`가능 영역 ${S.M}×${S.M}칸 · 바다 ${S.B}칸으로 다시 만들었어요`);}
 function act(a){if(!canEdit())return;pushUndo();
  if(a==='fill'){autoFill();genBase();edited=false;}else if(a==='regen'){genBase();edited=false;}else if(a==='clearFoot'){foot.clear();if(!edited)genBase();}
  touch();updateTerrain();changed(true);markDirty();renderFootNote();}
@@ -775,7 +781,7 @@ function serialize(){return{v:2,S:{...S},types:TYPES.map(t=>({k:t.k,W:t.W,D:t.D,
 function summary(){const st=stats(),isl=st.island||1;return{island:st.island,intr:st.intr/isl*100,sup:st.sup/isl*100,land:st.land/isl*100,fill:st.fill,maxH:st.maxH,R:S.R,fa:st.fa,nb:blocks.length};}
 function load(o){S={...DEF,...(o.S||{})};alloc();if(o.N===N&&o.H)H=unpackH(o.H,N);
  TYPES=TYPES0.map(t=>({...t,...((o.types||[]).find(x=>x.k===t.k)||{})}));reTK();
- foot=new Set(o.foot||[]);blocks=(o.blocks||[]).filter(b=>TK[b.t]);edited=!!o.edited;bsel=-1;sel.clear();undoStack.length=0;
+ foot=new Set(o.foot||[]);blocks=(o.blocks||[]).filter(b=>TK[b.t]);edited=!!o.edited;bsel=-1;sel.clear();clearHistory();
  if(o.W!=null)W=o.W;spring=o.spring!==false;
  if(!o.H){autoFill();genBase();}
  clampAll();refreshD();syncAllVars();dynHints();setUniforms();rebuildTerrain();secRange();renderTrack();setSpring(spring);renderPalette();renderTypes();
@@ -921,7 +927,7 @@ function applyRemote(m){if(!m||Sync.role!=='view')return;
  else if(m.t==='lite')applyLite(m.d);}
 function uiSync(){const s=$('syncS'),bar=$('syncbar'),pn=$('syncPn');const r=Sync.role;
  s.textContent=r==='ctrl'?'조작 중':r==='view'?'보는 중':(Sync.status?Sync.status:'혼자');
- $('ctl').disabled=r==='view';document.querySelectorAll('[data-tool],#modeStep,#modeCont,#undoBtn,#play,#spring,#neap,#water,#waterNum,#saveBtn').forEach(b=>{if(b.dataset&&b.dataset.tool==='view')return;b.disabled=r==='view'});
+ $('ctl').disabled=r==='view';document.querySelectorAll('[data-tool],#modeStep,#modeCont,#play,#spring,#neap,#water,#waterNum,#saveBtn').forEach(b=>{if(b.dataset&&b.dataset.tool==='view')return;b.disabled=r==='view'});
  if(r==='solo'){bar.hidden=true;}else{bar.hidden=false;bar.innerHTML=r==='ctrl'?`<b>방 ${esc(Sync.room)}</b> · ${esc(Sync.status)} · 보는 사람 ${Sync.conns.length}명`:`<b>방 ${esc(Sync.room)}</b> · ${esc(Sync.status)} · 보기 전용${Sync.follow?'':' · <button id="followBtn">조작자 시점 따라가기</button>'}`;const fb=$('followBtn');if(fb)fb.onclick=()=>{Sync.follow=true;uiSync()};}
  if(!CAN_SYNC){pn.innerHTML='<p class="note">실시간 공유는 GitHub 페이지 주소에서 열었을 때만 쓸 수 있어요. 이 화면(claude.ai)은 외부 연결을 막아 두어서, 혼자 편집과 저장만 돼요.</p>';return}
  if(r==='solo')pn.innerHTML=`<p class="note">같은 방 이름으로 들어온 사람들이 지금 화면을 실시간으로 봐요. 조작은 방마다 한 명만 할 수 있어요. 로그인은 필요 없어요.</p><div class="var"><label for="roomIn">방 이름</label><input type="text" id="roomIn" value="${esc(Sync.room||'studio2')}"></div><div class="row"><button class="pri" id="ctrlGo">이 버전으로 조작하기</button></div><p class="note">보는 사람은 목록 화면의 '실시간 방 보기'에 같은 방 이름을 넣거나, 조작을 시작한 뒤 나오는 보기 링크로 들어와요.</p>`;
@@ -930,7 +936,7 @@ function uiSync(){const s=$('syncS'),bar=$('syncbar'),pn=$('syncPn');const r=Syn
  const g=id=>$(id);if(g('ctrlGo'))g('ctrlGo').onclick=()=>{const v=g('roomIn').value.trim().replace(/[^a-zA-Z0-9_-]/g,'');if(!v){toast('방 이름을 영문·숫자로 넣어 주세요',true);return}Sync.control(v)};
  if(g('copyRoom'))g('copyRoom').onclick=()=>{const t=location.origin+location.pathname+'#room-'+Sync.room;navigator.clipboard.writeText(t).then(()=>toast('보기 링크를 복사했어요'),()=>toast('복사하지 못했어요. 위 주소를 직접 선택해 주세요',true))};
  if(g('handOff'))g('handOff').onclick=()=>{const r=Sync.room;Sync.leave(true);Sync.view(r);toast('조작을 넘겼어요. 이제 보기 전용이에요')};
- if(g('takeGo'))g('takeGo').onclick=()=>Sync.control(Sync.room);if(g('leaveGo'))g('leaveGo').onclick=()=>{Sync.leave();go('#home')};}
+ updUR();if(g('takeGo'))g('takeGo').onclick=()=>Sync.control(Sync.room);if(g('leaveGo'))g('leaveGo').onclick=()=>{Sync.leave();go('#home')};}
 
 /* ───────── 테마 ───────── */
 function applyTheme(){readTokens();uni.cSub.value.copy(C['z-sub']);uni.cInt.value.copy(C['z-int']);uni.cSup.value.copy(C['z-sup']);uni.cLand.value.copy(C['z-land']);uni.cInk.value.copy(C.ink);uni.cMass.value.copy(C.mass);uni.cMassLo.value.copy(C.kan);
@@ -951,7 +957,7 @@ applyTheme();buildPanels();
 S={...DEF};alloc();autoFill();genBase();setUniforms();rebuildTerrain();secRange();renderTrack();
 document.querySelectorAll('[data-tool]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.tool===tool));
 $('gsz').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',Number(b.dataset.g)===S.g));
-uiSync();renderHelp();requestAnimationFrame(frame);route();
+uiSync();updUR();renderHelp();requestAnimationFrame(frame);route();
 window.__T={get S(){return S},stats:()=>{stCache=null;return stats()},blocks:()=>blocks.map(b=>({t:b.t,...judge(b)})),goView,setWater,setMode,newDoc,op,setG,setTool,addBlock,
  get sel(){return sel},get foot(){return foot},selectCells:(f)=>{sel=new Set(f(K));updateSel();},get N(){return N},get D(){return D},serialize,saveDoc,K,cellOf,get inSite(){return inSite},
  setS:(o)=>{Object.assign(S,o);setTransform();setUniforms();if(!edited)genBase();touch();refreshD();updateTerrain();changed(true)},route,Sync,get dirty(){return dirty},get edited(){return edited}};
