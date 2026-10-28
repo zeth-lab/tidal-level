@@ -114,6 +114,7 @@ details.tc>summary:hover{background:color-mix(in srgb,var(--acc) 5%,transparent)
 .sep{width:1px;height:20px;background:var(--kan);margin:0 4px}
 .gsz{display:flex;gap:4px;flex-wrap:wrap}
 .gsz button{font-family:var(--f-mono);min-width:34px;padding:4px 6px}
+.gsz input{width:58px;font-size:12px;padding:3px 5px}
 .gsz button kbd{font:400 9px var(--f-mono);color:var(--mute);margin-left:3px}
 .ops{top:52px;left:10px;background:color-mix(in srgb,var(--sheet) 92%,transparent);border:1px solid var(--acc);padding:4px 6px;border-radius:4px}
 .ops .lbl{font:500 11.5px var(--f-mono);color:var(--acc);margin-right:4px}
@@ -316,7 +317,8 @@ const EX=()=>PV.on?1:S.exag;
 const PCOL=[['돌','#cfc9bc'],['목재','#b58b5c'],['흰 판','#f3f1ea'],['먹','#4b4b52'],['물빛','#86aecf'],['황토','#c9a762']];
 const TYPES0=[{k:'u1',name:'유닛 1 · 1–3인',W:10,D:6,F:1,n:12},{k:'u2',name:'유닛 2 · 4–6인',W:14,D:10,F:1,n:4},{k:'hub',name:'허브',W:60,D:15,F:2,n:1},{k:'nk',name:'누각',W:44,D:12,F:1,n:1,raised:true},{k:'jj',name:'정자',W:6,D:6,F:1,n:1}];
 let TYPES=TYPES0.map(t=>({...t})),TK={};const reTK=()=>{TK=Object.fromEntries(TYPES.map(t=>[t.k,t]))};reTK();
-const GS=[12,6,4,3,2,1];
+let GS=[12,6,4,3,2,1],gsKey='';
+function gsList(){const G=S.G,o=[];for(let d=G;d>=1;d--)if(Math.abs(G/d-Math.round(G/d))<1e-6)o.push(d);if(Math.abs(G-Math.round(G))>1e-6)o.unshift(G);return o.slice(0,6);}
 
 /* ───────── 격자·상태 ───────── */
 let N=0,H,D,inSite,U0,V0,GU,GV,FR,LAND,half=120,A=[1,0,0,1],Ai=[1,0,0,1];
@@ -887,9 +889,12 @@ function renderHelp(){if(PV.on){$('help').innerHTML='<b>사람 시점</b> · 드
 document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>setTool(b.dataset.tool));
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{goView(b.dataset.view);sync()});
 document.querySelectorAll('[data-op]').forEach(b=>b.onclick=()=>op(b.dataset.op));
-$('gsz').innerHTML=GS.map((g,i)=>`<button data-g="${g}" title="숫자 ${i+1}">${g}m<kbd>${i+1}</kbd></button>`).join('');
-$('gsz').querySelectorAll('button').forEach(b=>b.onclick=()=>setG(Number(b.dataset.g)));
-function setG(g){if(S.g!==g){S.g=g;sel.clear();}if(tool!=='edit')setTool('edit');uni.uGs.value=g;$('gsz').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',Number(b.dataset.g)===g));hover=null;updateHover();updateSel();need=true;sync();}
+function renderGsz(force){const key=S.G+'|'+S.g;if(!force&&key===gsKey)return;gsKey=key;GS=gsList();const e=$('gsz');if(!e)return;
+ e.innerHTML=GS.map((g,i)=>`<button data-g="${g}" title="숫자 ${i+1}" aria-pressed="${g===S.g}">${g}m<kbd>${i+1}</kbd></button>`).join('')+`<input type="number" id="gIn" min="0.5" max="${S.G}" step="0.5" value="${S.g}" title="칸 크기 직접 입력 (m)" aria-label="편집 칸 크기 m"><span class="u" style="font:400 11px var(--f-mono);color:var(--mute);align-self:center">m</span>`;
+ e.querySelectorAll('button').forEach(b=>b.onclick=()=>setG(Number(b.dataset.g)));
+ const gi=$('gIn');gi.onchange=()=>{let v=Number(gi.value);if(!Number.isFinite(v)||v<=0){gi.value=S.g;return}v=Math.max(0.5,Math.min(S.G,Math.round(v*2)/2));setG(v);};gi.onkeydown=ev=>{if(ev.key==='Enter')gi.blur();};}
+renderGsz(true);
+function setG(g){if(S.g!==g){S.g=g;sel.clear();}if(tool!=='edit')setTool('edit');uni.uGs.value=g;renderGsz();hover=null;updateHover();updateSel();need=true;sync();}
 function setMode(m){if(S.mode===m)return;S.mode=m;$('modeStep').setAttribute('aria-pressed',m==='step');$('modeCont').setAttribute('aria-pressed',m==='cont');refreshD();rebuildTerrain();changed(true);markDirty();}
 $('modeStep').onclick=()=>canEdit()&&setMode('step');$('modeCont').onclick=()=>canEdit()&&setMode('cont');$('undoBtn').onclick=undo;$('redoBtn').onclick=redo;
 
@@ -989,7 +994,7 @@ const P=[
   {html:'<p class="note" id="footNote"></p>'},
   {html:'<div class="clu" id="cluCtl"></div>'}]},
  {id:'edit',n:'02',t:'편집',s:'EDIT',items:[
-  {html:'<p class="note">위 도구 <b>편집</b>에서 칸 크기(12·6·4·3·2·1m)를 고르고 칸을 클릭하면 파란 윤곽이 생겨요. ▲ ▼ 평탄 다듬기로 바꾸고, 빈 곳을 클릭하면 선택이 끝나요.</p>'},
+  {html:'<p class="note">위 도구 <b>편집</b>에서 칸 크기(큰 칸의 약수 버튼 또는 직접 입력)를 고르고 칸을 클릭하면 파란 윤곽이 생겨요. ▲ ▼ 평탄 다듬기로 바꾸고, 빈 곳을 클릭하면 선택이 끝나요.</p>'},
   {k:'autoSlope',l:'올리고 내린 곳 둘레에 비탈 자동',chk:1,h:'올린 칸 둘레에 흙을 덧대고, 판 칸 둘레를 깎아 1:n 비탈을 만들어요.'},
   {k:'slopeN',l:'비탈 기울기 1:n',u:'n',min:1,max:40,step:1,h:''}]},
  {id:'bld',n:'03',t:'건물',s:'BUILD',items:[{html:'<div class="pal" id="pal"></div><div id="bSelCtl"></div><p class="note">종류를 누르면 화면 가운데에 하나 떠요. 위 도구 <b>건물</b>에서 끌어 옮기고 R로 돌려요.</p><div class="btype"><span class="h">종류</span><span class="h">가로</span><span class="h">세로</span><span class="h">층</span><span class="h">목표</span></div><div id="btypes" style="display:grid;gap:4px"></div>'},
@@ -1047,7 +1052,7 @@ function act(a){if(!canEdit())return;pushUndo();cluBase=null;
  if(a==='fill'){autoFill();genBase();edited=false;}else if(a==='regen'){genBase();edited=false;}else if(a==='clearFoot'){foot.clear();clusters=[];grpSel.clear();cselId=0;computeFrames();if(!edited)genBase();}
  touch();updateTerrain();changed(true);markDirty();renderFootNote();renderClusters();}
 function setGridU(){uni.uGs.value=tool==='edit'?S.g:tool==='path'?(Number(S.pSnap)||1):S.G;uni.uGa.value=tool==='path'?0.26:0.13;need=true;}
-function setUniforms(){uni.uExag.value=EX();uni.uR.value=S.R;uni.uS.value=S.storm;uni.uU.value=U();uni.uG.value=S.G;setGridU();uni.uShowGrid.value=S.showGrid?1:0;uni.uMono.value=S.colorMode==='mono'?1:0;uni.uLo.value=S.seabed;uni.uHi.value=ceilEL();uni.uInv.value.set(Ai[0],Ai[1],Ai[2],Ai[3]);uni.uHalf.value=half;uni.uSiteH.value=S.M*S.G/2;need=true;}
+function setUniforms(){if(typeof renderGsz==='function')renderGsz();uni.uExag.value=EX();uni.uR.value=S.R;uni.uS.value=S.storm;uni.uU.value=U();uni.uG.value=S.G;setGridU();uni.uShowGrid.value=S.showGrid?1:0;uni.uMono.value=S.colorMode==='mono'?1:0;uni.uLo.value=S.seabed;uni.uHi.value=ceilEL();uni.uInv.value.set(Ai[0],Ai[1],Ai[2],Ai[3]);uni.uHalf.value=half;uni.uSiteH.value=S.M*S.G/2;need=true;}
 function renderBSel(){const e=$('bSelCtl');if(!e)return;const b=blocks[bsel];if(bsel<0||!b||!TK[b.t]){e.innerHTML='';return}const t=TK[b.t],BP=bPost(b);let k=0;for(let i=0;i<=bsel;i++)if(blocks[i].t===b.t)k++;
  e.innerHTML=`<div class="pn" style="padding:10px;border:1px solid var(--acc);border-radius:4px;margin-top:8px;gap:8px"><div style="font-size:12.5px"><b>${esc(t.name.split(' · ')[0])} ${k}</b> <span class="muted">고르는 중</span></div><div class="var"><label for="bPw">기둥 너비</label><div class="num"><input type="number" id="bPw" min="0" max="3" step="0.05" value="${BP.pw}"><span class="u">m</span></div></div><div class="var"><label for="bPs">기둥 간격</label><div class="num"><input type="number" id="bPs" min="0.5" max="20" step="0.5" value="${BP.ps}"><span class="u">m</span></div><span class="hint">${t.raised?'띄운 몸채 아래에 서는 기둥이에요.':'벽선에 서는 기둥이에요.'} 모서리에는 항상 서고, 그 사이를 간격에 가깝게 나눠요. 너비 0 = 기둥 없음.</span></div><div class="row"><button id="bPall">같은 종류 ${blocks.filter(x=>x.t===b.t).length}동에 모두 적용</button></div></div>`;
  const ap=all=>{if(!canEdit())return;let pw=Number($('bPw').value),ps=Number($('bPs').value);if(!Number.isFinite(pw)||!Number.isFinite(ps))return;pw=Math.max(0,Math.min(3,pw));ps=Math.max(0.5,Math.min(20,ps));pushUndo();(all?blocks.filter(x=>x.t===b.t):[b]).forEach(x=>{x.pw=pw;x.ps=ps;});rebuildBlocks();renderStats();markDirty();sync();if(all)toast(`${t.name.split(' · ')[0]} 전부에 적용했어요`);};
