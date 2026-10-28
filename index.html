@@ -321,7 +321,7 @@ const ceilEL=()=>S.maxFloors*S.floorH;
 const PV={on:false,x:0,z:0,h:0,p:0,fov:60,eye:1.6,speed:3,lt:0};const keys=new Set();
 const EX=()=>PV.on?1:S.exag;
 const PCOL=[['돌','#cfc9bc'],['목재','#b58b5c'],['흰 판','#f3f1ea'],['먹','#4b4b52'],['물빛','#86aecf'],['황토','#c9a762']];
-const TYPES0=[{k:'u1',name:'유닛 1 · 1–3인',W:10,D:6,F:1,n:12,unit:true},{k:'u2',name:'유닛 2 · 4–6인',W:14,D:10,F:1,n:4,unit:true},{k:'hub',name:'허브',W:60,D:15,F:2,n:1},{k:'nk',name:'누각',W:44,D:12,F:1,n:1,raised:true},{k:'jj',name:'정자',W:6,D:6,F:1,n:1},{k:'pond',name:'연못',W:12,D:8,F:1,n:1,pool:true},{k:'pool',name:'개인 풀',W:6,D:3,F:1,n:4,pool:true},{k:'free',name:'자유 오브젝트',W:6,D:6,F:1,n:0,free:true}];
+const TYPES0=[{k:'u1',name:'유닛 1 · 1–3인',W:10,D:6,F:1,H:2.5,n:12,unit:true},{k:'u2',name:'유닛 2 · 4–6인',W:14,D:10,F:1,H:2.5,n:4,unit:true},{k:'hub',name:'허브',W:60,D:15,F:2,n:1},{k:'nk',name:'누각',W:44,D:12,F:1,n:1,raised:true},{k:'jj',name:'정자',W:6,D:6,F:1,n:1},{k:'pond',name:'연못',W:12,D:8,F:1,n:1,pool:true},{k:'pool',name:'개인 풀',W:6,D:3,F:1,n:4,pool:true},{k:'free',name:'자유 오브젝트',W:6,D:6,F:1,n:0,free:true}];
 let TYPES=TYPES0.map(t=>({...t})),TK={};const reTK=()=>{TK=Object.fromEntries(TYPES.map(t=>[t.k,t]))};reTK();
 let GS=[12,6,4,3,2,1],gsKey='';
 function gsList(){const G=S.G,o=[];for(let d=G;d>=1;d--)if(Math.abs(G/d-Math.round(G/d))<1e-6)o.push(d);if(Math.abs(G-Math.round(G))>1e-6)o.unshift(G);return o.slice(0,6);}
@@ -544,7 +544,7 @@ const KAN0={u1:2,u2:2,hub:3,nk:4,jj:2};
 function bPost(b){const t=TK[b.t]||{};const pw=Number.isFinite(b.pw)?b.pw:(t.raised?0.4:0),ps=Number.isFinite(b.ps)?b.ps:(t.raised?4:(KAN0[b.t]||2));return{pw:Math.max(0,pw),ps:Math.max(0.5,ps)};}
 function dims(b){const t=TK[b.t],w=!t.unit&&Number.isFinite(b.W)?b.W:t.W,d=!t.unit&&Number.isFinite(b.D)?b.D:t.D;return b.rot?[d,w]:[w,d];}
 const bShape=b=>(TK[b.t]&&TK[b.t].unit)?'box':(b.shape||'box');
-const bHt=b=>{const t=TK[b.t];return t.pool?0.35:(!t.unit&&Number.isFinite(b.H)?b.H:t.F*S.floorH);};
+const bHt=b=>{const t=TK[b.t];return t.pool?0.35:t.unit?(Number.isFinite(t.H)?t.H:2.5):(Number.isFinite(b.H)?b.H:t.F*S.floorH);};
 const bLift=b=>Number.isFinite(b.lift)?b.lift:S.nkFloors*S.floorH;
 const bOp=b=>S.xray?0.35:(Number.isFinite(b.op)?b.op:1);
 function inB(lx,lz,w,d,sh){return sh==='cyl'?((lx*lx)/(w*w/4)+(lz*lz)/(d*d/4)<=1):(Math.abs(lx)<=w/2&&Math.abs(lz)<=d/2);}
@@ -1068,7 +1068,7 @@ const P=[
   {html:'<p class="note">위 도구 <b>편집</b>에서 칸 크기(큰 칸의 약수 버튼 또는 직접 입력)를 고르고 칸을 클릭하면 파란 윤곽이 생겨요. ▲ ▼ 평탄 다듬기로 바꾸고, 빈 곳을 클릭하면 선택이 끝나요.</p>'},
   {k:'autoSlope',l:'올리고 내린 곳 둘레에 비탈 자동',chk:1,h:'올린 칸 둘레에 흙을 덧대고, 판 칸 둘레를 깎아 1:n 비탈을 만들어요.'},
   {k:'slopeN',l:'비탈 기울기 1:n',u:'n',min:1,max:40,step:1,h:''}]},
- {id:'bld',n:'03',t:'건물',s:'BUILD',items:[{html:'<div class="pal" id="pal"></div><div id="bSelCtl"></div><div id="bIndiv"></div><p class="note">종류를 누르면 화면 가운데에 하나 떠요. 위 도구 <b>건물</b>에서 끌어 옮기고 R로 15°씩 돌려요. 건물을 고르면 여기서 회전·모양(원형)·크기·색·투명도를 바꿔요.</p><p class="note" style="margin-top:6px">종류 표 · 유닛은 여기 값이 모든 동에 바로 적용돼요. 다른 건물은 새로 놓을 때의 기본값이고, 놓은 뒤에는 위 <b>개별 건물 수치</b>에서 하나씩 바꿔요.</p><div class="btype"><span class="h">종류</span><span class="h">가로</span><span class="h">세로</span><span class="h">층</span><span class="h">목표</span></div><div id="btypes" style="display:grid;gap:4px"></div>'},
+ {id:'bld',n:'03',t:'건물',s:'BUILD',items:[{html:'<div class="pal" id="pal"></div><div id="bSelCtl"></div><div id="bIndiv"></div><p class="note">종류를 누르면 화면 가운데에 하나 떠요. 위 도구 <b>건물</b>에서 끌어 옮기고 R로 15°씩 돌려요. 건물을 고르면 여기서 회전·모양(원형)·크기·색·투명도를 바꿔요.</p><p class="note" style="margin-top:6px">종류 표 · 유닛은 여기 값이 모든 동에 바로 적용돼요. 다른 건물은 새로 놓을 때의 기본값이고, 놓은 뒤에는 위 <b>개별 건물 수치</b>에서 하나씩 바꿔요.</p><div class="btype"><span class="h">종류</span><span class="h">가로</span><span class="h">세로</span><span class="h">층·높이</span><span class="h">목표</span></div><div id="btypes" style="display:grid;gap:4px"></div>'},
   {k:'nkFloors',l:'누각 띄움 높이',u:'층',min:1,max:6,step:1,h:'누각 바닥이 발밑 땅에서 몇 층 위에 뜨는지예요.'},
   {k:'kan',l:'옮길 때 맞출 칸',sel:[['1','1m'],['2','2m (유닛)'],['3','3m (허브)'],['4','4m (누각)'],['12','12m']]},
   {k:'snapKan',l:'칸에 맞춰 옮기기',chk:1},{k:'roofOn',l:'평지붕 표시',chk:1,h:'건물마다 끌 수도 있어요 (건물을 골라서).'},{k:'roofOp',l:'지붕 투명도',u:'',min:0.1,max:1,step:0.05,h:'1 = 불투명. 낮출수록 지붕 아래 평면이 비쳐요.'},{k:'roofOv',l:'처마 길이',u:'m',min:0,max:4,step:0.5,h:'벽선에서 지붕이 나오는 길이예요. 누각은 2m로 고정이에요.'},{k:'xray',l:'모든 건물·길 반투명 (한 번에)',chk:1},{k:'statusTint',l:'판정을 건물 색으로 표시',chk:1,h:'연보라 = 대지 위 · 주황 = 조상대·단차 주의 · 먹색 = 만조에 잠김'}]},
@@ -1139,7 +1139,7 @@ function renderBSel0(){const e=$('bSelCtl');if(!e)return;const b=blocks[bsel];if
  e.innerHTML=`<div class="pn" style="padding:10px;border:1px solid var(--acc);border-radius:4px;margin-top:8px;gap:8px"><div style="font-size:12.5px"><b>${esc(nm)} ${k}</b> <span class="muted">고르는 중 · 화면에서 끌어 옮겨요</span></div>
  <div class="var"><label for="bAng">회전</label><div class="num"><input type="number" id="bAng" step="1" value="${normAng(b.ang||0)}"><span class="u">°</span></div></div>
  <div class="row"><button data-brot="-15">⟲ 15°</button><button data-brot="15">⟳ 15°</button><button data-brot="90">+90°</button><button data-brot="z">0°</button></div>
- ${t.unit?`<p class="note">유닛(숙박)은 같은 모듈이라 크기·높이를 아래 <b>종류 표</b>에서 한꺼번에 바꿔요. 여기서는 회전·색·투명도만 따로 정해요.</p>`:`<div class="var"><label for="bShape">모양</label><select id="bShape"><option value="box"${sh==='box'?' selected':''}>사각</option><option value="cyl"${sh==='cyl'?' selected':''}>원형·타원</option></select></div>
+ ${t.unit?`<p class="note">유닛(숙박)은 같은 모듈이라 크기·높이를 아래 <b>종류 표</b>에서 한꺼번에 바꿔요. 여기서는 회전·색·투명도만 따로 정해요.</p><div class="var"><label for="bUH">${esc(nm)} 높이 (모든 동)</label><div class="num"><input type="number" id="bUH" min="1" max="12" step="0.1" value="${t.H}"><span class="u">m</span></div><span class="hint">기본 2.5m · 바닥에서 지붕 아래까지예요.</span></div>`:`<div class="var"><label for="bShape">모양</label><select id="bShape"><option value="box"${sh==='box'?' selected':''}>사각</option><option value="cyl"${sh==='cyl'?' selected':''}>원형·타원</option></select></div>
  <div class="var"><label for="bW">${sh==='cyl'?'지름 가로':'가로'}</label><div class="num"><input type="number" id="bW" min="1" max="200" step="0.5" value="${w0}"><span class="u">m</span></div></div>
  <div class="var"><label for="bD">${sh==='cyl'?'지름 세로':'세로'}</label><div class="num"><input type="number" id="bD" min="1" max="200" step="0.5" value="${d0}"><span class="u">m</span></div>${sh==='cyl'?'<span class="hint">가로·세로를 같게 두면 원이에요.</span>':''}</div>
  ${t.pool?'':`<div class="var"><label for="bF">층수</label><div class="num"><input type="number" id="bF" min="1" max="12" step="1" value="${Math.max(1,Math.round(bHt(b)/S.floorH))}"><span class="u">층</span></div></div><div class="var"><label for="bH">높이</label><div class="num"><input type="number" id="bH" min="0.3" max="40" step="0.5" value="${+bHt(b).toFixed(2)}"><span class="u">m</span></div><span class="hint">층수를 바꾸면 높이 = 층수 × ${S.floorH}m. 높이를 직접 넣어도 돼요.</span></div>`}
@@ -1155,6 +1155,7 @@ function renderBSel0(){const e=$('bSelCtl');if(!e)return;const b=blocks[bsel];if
  if($('bShape'))$('bShape').onchange=()=>commit(()=>{b.shape=$('bShape').value==='cyl'?'cyl':undefined;});
  const num=(id,key,lo,hi)=>{const el2=$(id);if(el2)el2.onchange=()=>{const v=Number(el2.value);if(!Number.isFinite(v))return;commit(()=>{b[key]=Math.max(lo,Math.min(hi,v));if(key!=='H')snapB(b);});};};
  num('bW','W',1,200);num('bD','D',1,200);num('bH','H',0.3,40);
+ if($('bUH'))$('bUH').onchange=()=>{const v=Number($('bUH').value);if(!Number.isFinite(v))return;commit(()=>{t.H=Math.max(1,Math.min(12,Math.round(v*10)/10));});renderTypes();renderPalette();};
  if($('bF'))$('bF').onchange=()=>{const v=Math.round(Number($('bF').value));if(!Number.isFinite(v))return;commit(()=>{b.H=Math.max(1,Math.min(12,v))*S.floorH;});};
  if($('bLift'))$('bLift').onchange=()=>{const r=$('bLift').value.trim();if(r===''){commit(()=>{delete b.lift;});return}const v=Number(r);if(!Number.isFinite(v))return;commit(()=>{b.lift=Math.max(0,Math.min(30,v));});};
  e.querySelectorAll('[data-bc]').forEach(x=>x.onclick=()=>commit(()=>{b.col=x.dataset.bc;}));
@@ -1166,17 +1167,17 @@ function renderBSel0(){const e=$('bSelCtl');if(!e)return;const b=blocks[bsel];if
  const ap=all=>{if(!canEdit()||!$('bPw'))return;let pw=Number($('bPw').value),ps=Number($('bPs').value);if(!Number.isFinite(pw)||!Number.isFinite(ps))return;pw=Math.max(0,Math.min(3,pw));ps=Math.max(0.5,Math.min(20,ps));pushUndo();(all?blocks.filter(x=>x.t===b.t):[b]).forEach(x=>{x.pw=pw;x.ps=ps;});rebuildBlocks();renderStats();markDirty();sync();};
  if($('bPw')){$('bPw').onchange=()=>ap(false);$('bPs').onchange=()=>ap(false);}
  $('bPall').onclick=()=>{if(!canEdit())return;pushUndo();const keys2=['ang','shape','W','D','H','lift','col','op','roof','pw','ps'];blocks.filter(x=>x.t===b.t&&x!==b).forEach(x=>{keys2.forEach(k2=>{if(b[k2]===undefined)delete x[k2];else x[k2]=b[k2];});snapB(x);});rebuildBlocks();changed(false);markDirty();toast(`${nm} 전부에 같은 설정을 적용했어요`);};}
-function renderPalette(){const e=$('pal');if(!e)return;e.innerHTML=TYPES.map(t=>{const c=blocks.filter(b=>b.t===t.k).length;return`<button data-add="${t.k}"><span><b>${t.name}</b><br><small>${t.W}×${t.D}m · ${t.pool?'석조 수조':t.free?'크기·색 자유':t.F+'층'}${t.raised?' · 띄움':''}</small></span><small>${c} / ${t.n}</small></button>`}).join('');
+function renderPalette(){const e=$('pal');if(!e)return;e.innerHTML=TYPES.map(t=>{const c=blocks.filter(b=>b.t===t.k).length;return`<button data-add="${t.k}"><span><b>${t.name}</b><br><small>${t.W}×${t.D}m · ${t.pool?'석조 수조':t.free?'크기·색 자유':t.unit?'높이 '+t.H+'m':t.F+'층'}${t.raised?' · 띄움':''}</small></span><small>${c} / ${t.n}</small></button>`}).join('');
  e.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addBlock(b.dataset.add));}
-function renderTypes(){const e=$('btypes');if(!e)return;e.innerHTML=TYPES.map(t=>`<div class="btype"><span>${t.name.split(' · ')[0]}</span>${['W','D','F','n'].map(k=>`<input aria-label="${t.name} ${k}" data-k="${k}" data-t="${t.k}" type="number" min="${k==='n'?0:k==='F'?1:2}" max="${k==='F'?6:120}" step="1" value="${t[k]}">`).join('')}</div>`).join('');
- e.querySelectorAll('input').forEach(inp=>inp.onchange=()=>{if(!canEdit())return;const t=TK[inp.dataset.t],k=inp.dataset.k;let v=Math.round(Number(inp.value));if(isNaN(v))return;t[k]=Math.max(k==='n'?0:k==='F'?1:2,v);blocks.forEach(snapB);renderPalette();changed(false);markDirty();});}
+function renderTypes(){const e=$('btypes');if(!e)return;e.innerHTML=TYPES.map(t=>`<div class="btype"><span>${t.name.split(' · ')[0]}</span>${['W','D',t.unit?'H':'F','n'].map(k=>`<input aria-label="${t.name} ${k}" title="${{W:'가로 m',D:'세로 m',F:'층수',H:'높이 m',n:'목표 동 수'}[k]}" data-k="${k}" data-t="${t.k}" type="number" min="${k==='n'?0:k==='F'?1:k==='H'?1:2}" max="${k==='F'?6:k==='H'?12:120}" step="${k==='H'?0.1:k==='n'||k==='F'?1:0.5}" value="${t[k]}">`).join('')}</div>`).join('');
+ e.querySelectorAll('input').forEach(inp=>inp.onchange=()=>{if(!canEdit())return;const t=TK[inp.dataset.t],k=inp.dataset.k;let v=Number(inp.value);if(!Number.isFinite(v))return;v=k==='n'||k==='F'?Math.round(v):k==='H'?Math.round(v*10)/10:Math.round(v*2)/2;t[k]=k==='H'?Math.max(1,Math.min(12,v)):Math.max(k==='n'?0:k==='F'?1:2,v);if(k==='H')renderTypes();blocks.forEach(snapB);renderPalette();changed(false);markDirty();});}
 
 /* ───────── 문서·버전 ───────── */
 function b64(u8){let s='';for(let i=0;i<u8.length;i+=8192)s+=String.fromCharCode.apply(null,u8.subarray(i,i+8192));return btoa(s);}
 function unb64(s){const r=atob(s),u8=new Uint8Array(r.length);for(let i=0;i<r.length;i++)u8[i]=r.charCodeAt(i);return u8;}
 function packH(){const a=new Int16Array(N*N);for(let k=0;k<N*N;k++)a[k]=Math.round(H[k]*100);return b64(new Uint8Array(a.buffer));}
 function unpackH(s,n){const a=new Int16Array(unb64(s).buffer),h=new Float32Array(n*n);for(let k=0;k<n*n;k++)h[k]=a[k]/100;return h;}
-function serialize(){return{v:2,S:{...S},types:TYPES.map(t=>({k:t.k,W:t.W,D:t.D,F:t.F,n:t.n})),foot:[...foot],clusters:JSON.parse(JSON.stringify(clusters)),blocks:blocks.map(b=>({...b})),paths:JSON.parse(JSON.stringify(paths)),N,H:packH(),edited,W,spring};}
+function serialize(){return{v:2,S:{...S},types:TYPES.map(t=>({k:t.k,W:t.W,D:t.D,F:t.F,H:t.H,n:t.n})),foot:[...foot],clusters:JSON.parse(JSON.stringify(clusters)),blocks:blocks.map(b=>({...b})),paths:JSON.parse(JSON.stringify(paths)),N,H:packH(),edited,W,spring};}
 function summary(){const st=stats(),isl=st.island||1;return{island:st.island,intr:st.intr/isl*100,sup:st.sup/isl*100,land:st.land/isl*100,fill:st.fill,maxH:st.maxH,R:S.R,fa:st.fa,nb:blocks.length,np:paths.length};}
 function load(o){S={...DEF,...(o.S||{})};alloc();if(o.N===N&&o.H)H=unpackH(o.H,N);
  TYPES=TYPES0.map(t=>({...t,...((o.types||[]).find(x=>x.k===t.k)||{})}));reTK();
@@ -1303,7 +1304,7 @@ const Sync={role:'solo',peer:null,conns:[],room:'',follow:true,retry:0,gen:0,sta
  leave(quiet){this.gen++;clearTimeout(this.retry);if(this.peer){try{this.peer.destroy()}catch(e){}}this.peer=null;this.conns=[];const was=this.role;this.role='solo';this.status='';uiSync();renderHelp();renderSaveState();if(!quiet&&was==='view')setTool('edit');},
  send(m){if(this.role!=='ctrl')return;for(const c of this.conns)if(c.open)try{c.send(m)}catch(e){}},
  full(){return{doc:serialize(),name:$('vname').value,lite:lite()}}};
-function lite(){return{S:{...S},foot:[...foot],clusters,cselId,grp:[...grpSel],blocks,types:TYPES.map(t=>({k:t.k,W:t.W,D:t.D,F:t.F,n:t.n})),W,spring,tPhase,sel:[...sel],tool,bsel,cam:{...V},name:$('vname').value,edited,paths,psel,PV:{on:PV.on,x:PV.x,z:PV.z,h:PV.h,p:PV.p,fov:PV.fov,eye:PV.eye}};}
+function lite(){return{S:{...S},foot:[...foot],clusters,cselId,grp:[...grpSel],blocks,types:TYPES.map(t=>({k:t.k,W:t.W,D:t.D,F:t.F,H:t.H,n:t.n})),W,spring,tPhase,sel:[...sel],tool,bsel,cam:{...V},name:$('vname').value,edited,paths,psel,PV:{on:PV.on,x:PV.x,z:PV.z,h:PV.h,p:PV.p,fov:PV.fov,eye:PV.eye}};}
 let syncT=0,syncPend=false;
 function sync(){if(Sync.role!=='ctrl'||!Sync.conns.length){dirtyBox=null;return}if(syncPend)return;syncPend=true;setTimeout(flushSync,Math.max(0,90-(performance.now()-syncT)));}
 function flushSync(){syncPend=false;syncT=performance.now();if(Sync.role!=='ctrl')return;
